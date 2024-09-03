@@ -5,6 +5,7 @@ import filedialpy
 import subprocess
 
 def convertFile(file_path):
+    batch_test = "echo hi"
     batch_file = ["convert.bat", file_path]
 
     if file_path.lower().endswith(".glb") or file_path.lower().endswith(".gltf"):
@@ -12,7 +13,7 @@ def convertFile(file_path):
     else:
         # Run the batch file (copied from chatgpt, not sure what some of this means)
         try:
-            result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            result = subprocess.run(batch_test, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             print("Output:\n", result.stdout)
             print("Errors:\n", result.stderr)
         except subprocess.CalledProcessError as e:
