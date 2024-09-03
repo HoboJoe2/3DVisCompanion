@@ -1,4 +1,5 @@
 :: Run script from the output folder so that the resulting glb file ends up there
+echo hi
 cd "..\output"
 
 :: -b is for background mode, -P means "run python script [script]", -- seperates the args for blender from the args for python, %1 is the arg

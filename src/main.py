@@ -44,7 +44,6 @@ def index():
 @app.route('/button_one', methods=['POST'])
 def button_one():
     path = filedialpy.openFile()
-    print(path)
     convertFile(path)  # Call the first function when Button 1 is pressed
     return redirect(url_for('index'))  # Redirect back to the homepage
 
@@ -55,5 +54,5 @@ def button_two():
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 if __name__ == '__main__':
-    convertFile('C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\test_assets\\dusty-old-bookshelf-free\\source\\Small_Bookshelf.blend')
-    #app.run(debug=True)
+    #convertFile("..\\test_assets\\dusty-old-bookshelf-free\\source\\Small_Bookshelf.blend")
+    app.run(debug=True)
