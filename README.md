@@ -1,5 +1,5 @@
 # 3DVisUploader
-
+# INSTALL: have bpy and dearpygui python modules installed in pip, also have the blender folder in the main folder (copy paste it from program files)
 Simple UI to upload 3D models to 3DVis.
 Also automatically converts models to GLTF format.
 
