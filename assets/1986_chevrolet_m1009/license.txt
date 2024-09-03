@@ -1,0 +1,11 @@
+Model Information:
+* title:	1986 Chevrolet M1009
+* source:	https://sketchfab.com/3d-models/1986-chevrolet-m1009-d2a462c09f054bb093e360a263478732
+* author:	snafuj (https://sketchfab.com/snafuj)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "1986 Chevrolet M1009" (https://sketchfab.com/3d-models/1986-chevrolet-m1009-d2a462c09f054bb093e360a263478732) by snafuj (https://sketchfab.com/snafuj) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
