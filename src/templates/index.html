@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Two Buttons Example</title>
+</head>
+<body>
+    <h1>Press a Button</h1>
+    <form action="{{ url_for('button_one') }}" method="post">
+        <button type="submit">Button 1</button>
+    </form>
+
+    <form action="{{ url_for('button_two') }}" method="post">
+        <button type="submit">Button 2</button>
+    </form>
+</body>

@@ -1,7 +1,7 @@
 import os
 import shutil
-import time
-import dearpygui.dearpygui as dpg
+from flask import Flask, redirect, url_for, render_template
+import filedialpy
 import subprocess
 
 def convertFile(file_path):
@@ -34,38 +34,26 @@ def convertAllFilesInDir(dir_path):
         convertFile(file)
     return
 
-def runGUI():
-    dpg.create_context()
-    dpg.create_viewport(title='Custom Title', width=600, height=300)
-    
-    def callback(sender, app_data, user_data):
-        print("Sender: ", sender)
-        print("App Data: ", app_data)
-    
-    def uploadFileCallback(sender, app_data):
-        print(f"sender is: {sender}")
-        print(f"app_data is: {app_data}")
-        dpg.show_item("file_dialog_id")
-   
 
-    def uploadFolderCallback(sender, app_data):
-        print(f"sender is: {sender}")
-        print(f"app_data is: {app_data}")
+app = Flask(__name__)
 
-    with dpg.file_dialog(directory_selector=False, show=False, callback=callback, id="file_dialog_id", width=700 ,height=400):
-        dpg.add_file_extension(".*")
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-    with dpg.window(label="Example Window"):
-        dpg.add_text("Hello, world")
-        dpg.add_button(label="Save")
-        dpg.add_input_text(label="string", default_value="Quick brown fox")
-        dpg.add_slider_float(label="float", default_value=0.273, max_value=1)
-        dpg.add_button(label="Upload File", callback=uploadFileCallback)
-        dpg.add_button(label="Upload Folder", callback=uploadFolderCallback)
+@app.route('/button_one', methods=['POST'])
+def button_one():
+    path = filedialpy.openFile()
+    print(path)
+    convertFile(path)  # Call the first function when Button 1 is pressed
+    return redirect(url_for('index'))  # Redirect back to the homepage
 
-    dpg.setup_dearpygui()
-    dpg.show_viewport()
-    dpg.start_dearpygui()
-    dpg.destroy_context()
+@app.route('/button_two', methods=['POST'])
+def button_two():
+    dir = filedialpy.openDir()
+    print(dir)
+    convertAllFilesInDir(dir)  # Call the second function when Button 2 is pressed
+    return redirect(url_for('index'))  # Redirect back to the homepage
 
-runGUI()
+if __name__ == '__main__':
+    app.run(debug=True)
