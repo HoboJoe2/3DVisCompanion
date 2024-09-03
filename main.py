@@ -1,13 +1,15 @@
 import os
 import subprocess
 
-# Replace 'path_to_your_batch_file.bat' with the path to your batch file
-batch_file = "convert.bat"
+def convert_file(file_path):
+    batch_file = ["convert.bat", file_path]
 
-# Run the batch file
-try:
-    result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    print("Output:\n", result.stdout)
-    print("Errors:\n", result.stderr)
-except subprocess.CalledProcessError as e:
-    print(f"Error occurred: {e}")
+    # Run the batch file (copied from chatgpt, not sure what some of this means)
+    try:
+        result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print("Output:\n", result.stdout)
+        print("Errors:\n", result.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+
+convert_file("assets\\birds\\source\\bird.fbx")
