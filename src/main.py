@@ -5,15 +5,15 @@ import filedialpy
 import subprocess
 
 def convertFile(file_path):
-    batch_test = "echo hi"
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     batch_file = ["convert.bat", file_path]
 
     if file_path.lower().endswith(".glb") or file_path.lower().endswith(".gltf"):
-        shutil.copy(file_path, "output")
+        shutil.copy(file_path, "..\\output")
     else:
         # Run the batch file (copied from chatgpt, not sure what some of this means)
         try:
-            result = subprocess.run(batch_test, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             print("Output:\n", result.stdout)
             print("Errors:\n", result.stderr)
         except subprocess.CalledProcessError as e:
@@ -55,5 +55,4 @@ def button_two():
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 if __name__ == '__main__':
-    #convertFile("..\\test_assets\\dusty-old-bookshelf-free\\source\\Small_Bookshelf.blend")
     app.run(debug=True)
