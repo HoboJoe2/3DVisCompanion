@@ -2,15 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Two Buttons Example</title>
+    <title>3DVisUploader</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
 </head>
 <body>
-    <h1>Press a Button</h1>
-    <form action="{{ url_for('button_one') }}" method="post">
-        <button type="submit">Button 1</button>
-    </form>
+    <div class="vertical">
+        <h1>INSTRUCTIONS</h1>
+        <div class="horizontal outer">
+            <div class = "inner">
+                <p>
+                    Accusamus quis quas harum eaque dolores numquam. Et doloribus esse impedit aut. Vel tempore totam quos hic ut quam quam.
+                    <br><br>
+                    Qui alias corrupti suscipit. Et iure et dolorem reiciendis ut dolorum. Ut quis beatae repudiandae facere sunt non. Et sequi veritatis fuga voluptatibus velit. Quia libero repudiandae quae fuga aut quibusdam sint eius. Laborum dolores enim et culpa aut.
+                    <br><br>
+                    Reprehenderit voluptatem voluptate dolores velit culpa voluptates. Consequuntur quibusdam accusamus impedit rerum saepe nulla quo atque. Modi fuga enim reiciendis aliquid similique sit. Ut aut ut laborum harum accusantium hic. In id facere architecto sunt cupiditate accusantium quo aspernatur.
+                    <br><br>
+                    Fugit officia est odit unde harum. Et unde nemo doloremque at. Sed nihil iste earum qui illum quo. Ut maiores doloribus commodi ducimus.
+                    <br><br>
+                    Nostrum ullam velit aut cum. Voluptatem voluptas rerum facilis voluptas quae exercitationem eaque ut. Est quo animi veniam. Mollitia nesciunt tenetur minima neque ad ipsum. Nemo praesentium aspernatur rerum doloribus illo dolorum.
+                </p>
+                <div class="flex-parent jc-center">
+                    <form action="{{ url_for('button_one') }}" class="margin-right" method="post">
+                        <button type="submit">IMPORT OBJECT</button>
+                    </form>
 
-    <form action="{{ url_for('button_two') }}" method="post">
-        <button type="submit">Button 2</button>
-    </form>
+                    <form action="{{ url_for('button_two') }}" method="post">
+                        <button type="submit">IMPORT ALL FROM FOLDER</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+</html>
