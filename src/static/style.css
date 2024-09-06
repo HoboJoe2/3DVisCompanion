@@ -4,7 +4,7 @@ html {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-size: 1.5em;
+    font-size: 1em;
     font-weight: 600;
     color: #0F1111;
 }
@@ -44,8 +44,8 @@ h1 {
     position: absolute;
     padding: 4px 20px;
     font-weight: 800;
-    left: -0.62em;
-    top: -2.8em;
+    left: -0.95em;
+    top: -3.21em;
     color: #FFF;
 }
 
@@ -68,9 +68,9 @@ button {
 }
 
 img {
-    width: 224.6px;
+    width: 224.5px;
     height: 223px;
 }
-form.margin-right {margin-right: 300px;}
+form.margin-right {margin-right: 200px;}
 .jc-center {justify-content: center;}
 .flex-parent {display: flex;}
