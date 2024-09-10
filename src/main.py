@@ -2,6 +2,8 @@ import os
 from flask import Flask, redirect, url_for, render_template
 import filedialpy
 import subprocess
+import threading
+import webbrowser
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -33,6 +35,9 @@ def convertAllFilesInDir(dir_path):
         convertFile(file)
     return
 
+def open_browser():
+    webbrowser.open("http://127.0.0.1:5000/")
+    return
 
 app = Flask(__name__)
 
@@ -53,4 +58,5 @@ def import_directory():
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    threading.Timer(1, open_browser).start()
+    app.run(debug=False)
