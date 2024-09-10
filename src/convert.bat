@@ -1,3 +1,6 @@
+:: Stop script from outputting to the console
+@echo off
+
 :: Run script from the output folder so that the resulting glb file ends up there
 cd "..\models"
 
