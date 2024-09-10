@@ -10,16 +10,13 @@ def convertFile(file_path):
     os.chdir(SCRIPT_DIR)
     batch_file = ["convert.bat", file_path]
 
-    if file_path.lower().endswith(".glb") or file_path.lower().endswith(".gltf"):
-        shutil.copy(file_path, "..\\models")
-    else:
-        # Run the batch file (copied from chatgpt, not sure what some of this means)
-        try:
-            result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            print("Output:\n", result.stdout)
-            print("Errors:\n", result.stderr)
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred: {e}")
+    # Run the batch file (copied from chatgpt, not sure what some of this means)
+    try:
+        result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print("Output:\n", result.stdout)
+        print("Errors:\n", result.stderr)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
     return
 
 def convertAllFilesInDir(dir_path):
