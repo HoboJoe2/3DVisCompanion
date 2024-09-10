@@ -7,9 +7,7 @@ a = Analysis(
     binaries=[],
     datas=[('templates', 'templates'), 
     ('static', 'static'), 
-    ('convert.bat', '.'), 
-    ('..\\Blender 4.2\\blender.exe', '.'), 
-    ('..\\2gltf2\\2gltf2.py', '.'),],
+    ('convert.bat', '.'),]
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
