@@ -4,12 +4,14 @@ from flask import Flask, redirect, url_for, render_template
 import filedialpy
 import subprocess
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def convertFile(file_path):
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    os.chdir(SCRIPT_DIR)
     batch_file = ["convert.bat", file_path]
 
     if file_path.lower().endswith(".glb") or file_path.lower().endswith(".gltf"):
-        shutil.copy(file_path, "..\\output")
+        shutil.copy(file_path, "..\\models")
     else:
         # Run the batch file (copied from chatgpt, not sure what some of this means)
         try:
@@ -24,7 +26,6 @@ def convertAllFilesInDir(dir_path):
     matched_files = []
     extensions = ['.abc', '.blend', '.dae', '.fbx', '.glb', '.gltf', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.wrl', '.x3d']
     for dirpath, dirnames, filenames in os.walk(dir_path):
-        print(f"{dirpath}, {dirnames}, {filenames}")
         for filename in filenames:
             for ext in extensions:
                 if filename.lower().endswith(ext):

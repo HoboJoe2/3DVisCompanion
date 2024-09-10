@@ -1,0 +1,8 @@
+
+{{
+    "original_model_path": "{current_argument}",
+    "original_model_name": "{current_basename}",
+    "original_extension": "{current_extension}",
+    "converted_model_path": "{export_dir}\model.glb",
+    "directory": "{export_dir}"
+}}
