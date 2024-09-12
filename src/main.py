@@ -12,7 +12,7 @@ def convertFile(file_path):
     os.chdir(SCRIPT_DIR)
     batch_file = ["convert.bat", file_path]
 
-    # Run the batch file (copied from chatgpt, not sure what some of this means)
+    # Run the batch file (copied from chatgpt, not sure what some of this means.)
     try:
         result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("--- STANDARD OUTPUT FROM BATCH FILE ---\n", result.stdout)
