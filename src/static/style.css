@@ -22,8 +22,8 @@ html {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-    font-size: 1em;
-    font-weight: 600;
+    font-size: 1.25em;
+    font-weight: 700;
     color: #0F1111;
 }
 
@@ -50,6 +50,7 @@ body {
 .vertical {
     transform: translateY(-50%);
     position: absolute;
+    width: 100%;
     top: 50%;
 }
 
@@ -57,7 +58,7 @@ body {
     box-shadow: 0px 0px 0px 20px #0F1111;
     border-radius: 10px;
     background: #FFF;
-    padding: 0.5rem;
+    padding: 1em;
     margin: 0;
 }
 
@@ -69,8 +70,8 @@ h1 {
     position: absolute;
     padding: 4px 20px;
     font-weight: 800;
-    left: -0.95em;
-    top: -3.21em;
+    left: -0.76em;
+    top: -2.97em;
     color: #FFF;
 }
 
