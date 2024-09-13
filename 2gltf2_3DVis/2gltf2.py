@@ -85,14 +85,14 @@ for current_argument in sys.argv:
     model_folder_name = generateUniqueFolderName(model_file_name)
     export_dir = f"{current_directory}\\{model_folder_name}"
     os.makedirs(export_dir, exist_ok=True)
-    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\model.glb")
+    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
 
     json_metadata = f"""
 {{
     "original_model_path": "{current_argument}",
     "original_model_name": "{current_basename}",
     "original_extension": "{current_extension}",
-    "converted_model_path": "{export_dir}\\model.glb",
+    "converted_model_path": "{export_dir}\\scene.gltf",
     "directory": "{export_dir}"
 }}
 """
