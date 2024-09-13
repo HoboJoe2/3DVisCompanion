@@ -29,8 +29,8 @@ import os
 import sys
 import datetime
 
-def generateUniqueFolderName():
-    return datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")
+def generateUniqueFolderName(model_name):
+    return f"""{model_name}({datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")})"""
 
 current_directory = os.getcwd()
 
@@ -81,7 +81,8 @@ for current_argument in sys.argv:
     if current_extension == ".wrl" or current_extension == ".x3d":
         bpy.ops.import_scene.x3d(filepath=current_argument)
 
-    model_folder_name = generateUniqueFolderName()
+    model_file_name = f"{current_basename}{current_extension}"
+    model_folder_name = generateUniqueFolderName(model_file_name)
     export_dir = f"{current_directory}\\{model_folder_name}"
     os.makedirs(export_dir, exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\model.glb")
@@ -95,6 +96,6 @@ for current_argument in sys.argv:
     "directory": "{export_dir}"
 }}
 """
-    
+
     with open(f"{export_dir}\\metadata.json", "w") as f:
         f.write(json_metadata)
