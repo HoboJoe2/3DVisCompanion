@@ -21,14 +21,14 @@ def convertFile(file_path):
 
 def convertAllFilesInDir(dir_path):
     matched_files = []
-    extensions = ['.abc', '.blend', '.dae', '.fbx', '.glb', '.gltf', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.wrl', '.x3d']
+    extensions = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.glb', '.gltf', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.wrl', '.x3d']
     for dirpath, dirnames, filenames in os.walk(dir_path):
         for filename in filenames:
             for ext in extensions:
                 if filename.lower().endswith(ext):
                     matched_files.append(os.path.join(dirpath, filename))
                     break  # Stop checking other extensions once a match is found
-    print("Found the following files:", matched_files)
+
     for file in matched_files:
         convertFile(file)
     return
