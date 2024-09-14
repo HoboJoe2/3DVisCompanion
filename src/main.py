@@ -11,11 +11,10 @@ def convertFile(file_path):
     print(f"--- BEGINNING IMPORT OF {file_path} ---")
     os.chdir(SCRIPT_DIR)
 
-    # Run the batch file (copied from chatgpt, not sure what some of this means.)
     try:
-        result = subprocess.run(f"powershell -File convert.ps1 -arg1 {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n", result.stdout.decode())
-        print("--- STANDARD ERROR OUTPUT FROM BATCH FILE ---\n", result.stderr.decode())
+        print("--- STANDARD ERROR OUTPUT FROM POWERSHELL FILE ---\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
         print(f"Error occurred during powershell file execution: {e}")
     return
