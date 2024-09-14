@@ -10,15 +10,14 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 def convertFile(file_path):
     print(f"--- BEGINNING IMPORT OF {file_path} ---")
     os.chdir(SCRIPT_DIR)
-    batch_file = ["convert.bat", file_path]
 
     # Run the batch file (copied from chatgpt, not sure what some of this means.)
     try:
-        result = subprocess.run(batch_file, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        print("--- STANDARD OUTPUT FROM BATCH FILE ---\n", result.stdout)
-        print("--- STANDARD ERROR OUTPUT FROM BATCH FILE ---\n", result.stderr)
+        result = subprocess.run(f"powershell -File convert.ps1 -arg1 {file_path}", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n", result.stdout.decode())
+        print("--- STANDARD ERROR OUTPUT FROM BATCH FILE ---\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred during batch file execution: {e}")
+        print(f"Error occurred during powershell file execution: {e}")
     return
 
 def convertAllFilesInDir(dir_path):
