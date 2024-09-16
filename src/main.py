@@ -10,13 +10,19 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 def convertFile(file_path):
     print(f"--- BEGINNING IMPORT OF {file_path} ---")
     os.chdir(SCRIPT_DIR)
+    output_log = ""
 
     try:
         result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n", result.stdout.decode())
         print("--- STANDARD ERROR OUTPUT FROM POWERSHELL FILE ---\n", result.stderr.decode())
+        output_log = output_log + f"--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n, {result.stdout.decode()}"
+        output_log = output_log + f"--- STANDARD ERROR FROM POWERSHELL FILE ---\n, {result.stderr.decode()}"
     except subprocess.CalledProcessError as e:
         print(f"Error occurred during powershell file execution: {e}")
+        output_log = output_log + f"Error occurred during powershell file execution: {e}"
+
+    
     return
 
 def convertAllFilesInDir(dir_path):
