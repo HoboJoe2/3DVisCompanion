@@ -7,7 +7,6 @@ import os
 import filedialpy
 import subprocess
 import threading
-import webbrowser
 import colorama
 import logging
 import time
@@ -52,10 +51,6 @@ def convertAllFilesInDir(dir_path):
 
     for file in matched_files:
         convertFile(file)
-    return
-
-def open_browser():
-    webbrowser.open_new("http://127.0.0.1:5000/")
     return
 
 app = Flask(__name__)
