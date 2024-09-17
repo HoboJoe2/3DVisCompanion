@@ -33,6 +33,8 @@
                     Use the import object button to import a single 3D model.
                     <br><br>
                     Use the import all from folder to import all 3D models in a folder. This will also search recursively through any sub-folders in the folder for 3D models.
+                    <br><br>
+                    Check the command prompt window to see upload progress and errors.
                 </p>
                 <div class="flex-parent jc-center">
                     <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
@@ -42,11 +44,6 @@
                     <form action="{{ url_for('import_directory') }}" method="post">
                         <button type="submit">IMPORT ALL FROM FOLDER</button>
                     </form>
-                </div>
-                <div>
-                    <textarea class="output log" readonly>
-                        Output from importing a model/models will appear here
-                    </textarea>
                 </div>
             </div>
         </div>
