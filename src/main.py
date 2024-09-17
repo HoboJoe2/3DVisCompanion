@@ -1,8 +1,8 @@
 import PyQt6.QtWidgets
 import PyQt6.QtWebEngineWidgets
 import PyQt6.QtCore
-from flask import Flask, redirect, url_for, render_template
 import PyQt6
+from flask import Flask, redirect, url_for, render_template
 import os
 import filedialpy
 import subprocess
@@ -12,22 +12,26 @@ import logging
 import time
 import sys
 
+# Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
 
+# Class definitions
 class MainWindow(PyQt6.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
-        self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000'))  # URL of your Flask app
+        self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
         self.show()
 
-def convertFile(file_path):    
+# Function definitions
+def convertFile(file_path):
+    os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
+
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
-    os.chdir(SCRIPT_DIR)
 
     try:
         result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -55,8 +59,8 @@ def convertAllFilesInDir(dir_path):
 
 app = Flask(__name__)
 
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
+log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
 @app.route('/')
 def index():
@@ -64,24 +68,26 @@ def index():
 
 @app.route('/import_file', methods=['POST'])
 def import_file():
-    path = filedialpy.openFile()
-    convertFile(path)  # Call the first function when Button 1 is pressed
+    path = filedialpy.openFile() # Get single file path
+    convertFile(path)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 @app.route('/import_directory', methods=['POST'])
 def import_directory():
-    dir = filedialpy.openDir()
-    convertAllFilesInDir(dir)  # Call the second function when Button 2 is pressed
+    dir = filedialpy.openDir() # Get directory path
+    convertAllFilesInDir(dir)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 def run_flask_app():
     app.run(port=5000)
 
+# Function calls
 if __name__ == '__main__':
     # Start Flask app in a separate thread
-    flask_thread = threading.Thread(target=run_flask_app)
-    flask_thread.daemon = True
+    flask_thread = threading.Thread(target=run_flask_app, daemon=True)
     flask_thread.start()
+
+    # Wait so thread can start
     time.sleep(1)
 
     # Start PyQt application

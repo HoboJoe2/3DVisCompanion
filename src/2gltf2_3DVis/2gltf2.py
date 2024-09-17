@@ -22,8 +22,6 @@
 # SOFTWARE.
 #
 
-#git test 2
-
 import bpy
 import os
 import sys
@@ -31,8 +29,6 @@ import datetime
 
 def generateUniqueFolderName(model_name):
     return f"""{model_name}({datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")})"""
-
-current_directory = os.getcwd()
 
 force_continue = True
 
@@ -46,6 +42,7 @@ for current_argument in sys.argv:
     root, current_extension = os.path.splitext(current_argument)
     current_basename = os.path.basename(root)
 
+    # This would be nicer as an if else with else: continue at the end instead of a bunch of if statements but it works
     if current_extension != ".gltf" and current_extension != ".glb" and current_extension != ".abc" and current_extension != ".blend" and current_extension != ".dae" and current_extension != ".fbx" and current_extension != ".obj" and current_extension != ".ply" and current_extension != ".stl" and current_extension != ".usd" and current_extension != ".usda" and current_extension != ".usdc" and current_extension != ".usdz" and current_extension != ".wrl" and current_extension != ".x3d":
         continue
 
@@ -81,10 +78,11 @@ for current_argument in sys.argv:
     if current_extension == ".wrl" or current_extension == ".x3d":
         bpy.ops.import_scene.x3d(filepath=current_argument)
 
-    model_file_name = f"{current_basename}{current_extension}"
+    model_file_name = f"{current_basename}{current_extension}" # Only used to generate folder name, models are renamed to scene.gltf
     model_folder_name = generateUniqueFolderName(model_file_name)
-    export_dir = f"{current_directory}\\{model_folder_name}"
-    os.makedirs(export_dir, exist_ok=True)
+    export_dir = f"{os.getcwd()}\\{model_folder_name}"
+    os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
+
     bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
 
     json_metadata = f"""
