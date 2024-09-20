@@ -5,6 +5,7 @@
     <title>3DVisUploader</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#rotate").on({
@@ -14,7 +15,28 @@
                 animationend() {
                     $(this).removeClass("logo");
                 },
-            });
+                
+                // Connect to the WebSocket server using Socket.IO
+                var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+                // WebSocket connection established
+                socket.on('connect', function() {
+                    console.log('WebSocket connected!');
+                });
+
+                // Listening for messages from the server
+                socket.on('message', function(msg) {
+                    var $newMessage = $('<li>').text(msg);
+                    $('#messages').append($newMessage);
+                });
+
+                // Send message when the button is clicked
+                $('#sendBtn').on('click', function() {
+                    var message = $('#message').val();
+                    socket.send(message);
+                    $('#message').val('');  // Clear the input field after sending
+                }), 
+            }); 
         });
     </script>
 </head>
