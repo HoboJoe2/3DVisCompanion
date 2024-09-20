@@ -1,6 +1,7 @@
 import PyQt6.QtWidgets
 import PyQt6.QtWebEngineWidgets
 import PyQt6.QtCore
+import PyQt6.QtGui
 import PyQt6
 from flask import Flask, redirect, url_for, render_template
 import os
@@ -22,6 +23,8 @@ colorama.init(autoreset=True)
 class MainWindow(PyQt6.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("3DVisUploader")
+        self.setWindowIcon(PyQt6.QtGui.QIcon('icon.png'))
         self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
         self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
