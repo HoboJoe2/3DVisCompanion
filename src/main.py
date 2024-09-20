@@ -16,6 +16,7 @@ import sys
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
+MODEL_FOLDER_PATH = "models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -32,6 +33,17 @@ class MainWindow(PyQt6.QtWidgets.QMainWindow):
         self.showMaximized()
 
 # Function definitions
+def getJSONFilesFromDirectory(dir_path):
+    matched_files = []
+    for dirpath, dirnames, filenames in os.walk(dir_path):
+        for filename in filenames:
+            if filename.lower().endswith(".json"):
+                matched_files.append(os.path.join(dirpath, filename))
+
+    return matched_files
+
+
+
 def convertFile(file_path):
     os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
 
