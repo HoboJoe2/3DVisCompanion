@@ -29,7 +29,7 @@ class MainWindow(PyQt6.QtWidgets.QMainWindow):
         self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
         self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
-        self.show()
+        self.showMaximized()
 
 # Function definitions
 def convertFile(file_path):

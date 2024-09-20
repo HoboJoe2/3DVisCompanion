@@ -87,12 +87,9 @@ for current_argument in sys.argv:
 
     json_metadata = f"""
 {{
-    "originalModelPath": "{current_argument}",
     "originalModelName": "{current_basename}",
     "originalExtension": "{current_extension}",
-    "convertedModelPath": "{export_dir}\\scene.gltf",
-    "convertedModelTexturesDirectory": "{export_dir}\\textures",
-    "convertedModelDirectory": "{export_dir}"
+    "modelDisplayName": "{current_basename}",
 }}
 """
 
