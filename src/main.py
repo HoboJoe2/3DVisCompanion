@@ -15,6 +15,7 @@ import sys
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -24,7 +25,7 @@ class MainWindow(PyQt6.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("3DVisUploader")
-        self.setWindowIcon(PyQt6.QtGui.QIcon('icon.png'))
+        self.setWindowIcon(PyQt6.QtGui.QIcon(ICON_PATH))
         self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
         self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)

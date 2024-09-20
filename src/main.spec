@@ -11,6 +11,7 @@ a = Analysis(
     ('templates', 'templates'),
     ('static', 'static'),
     ('convert.ps1', '.'),
+    ('icon.png', '.'),
     ],
     hiddenimports=[],
     hookspath=[],
