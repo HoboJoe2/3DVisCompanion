@@ -4,6 +4,7 @@ import PyQt6.QtCore
 import PyQt6.QtGui
 import PyQt6
 from flask import Flask, redirect, url_for, render_template
+import flask_socketio
 import os
 import filedialpy
 import subprocess
@@ -12,11 +13,12 @@ import colorama
 import logging
 import time
 import sys
+import json
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "src/models"
+MODEL_FOLDER_PATH = "src\\models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -40,6 +42,13 @@ def getJSONFilesFromDirectory(dir_path):
             if filename.lower().endswith(".json"):
                 matched_files.append(os.path.join(dirpath, filename))
     return matched_files
+
+def createJSONDictFromFilePathList(file_path_list):
+    json_dict = {}
+    for json_path in file_path_list:
+        with open(json_path, 'r') as json_file:
+            json_dict[json_path] = json.load(json_file)
+    return json_dict
 
 def convertFile(file_path):
     os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
@@ -71,13 +80,22 @@ def convertAllFilesInDir(dir_path):
     return
 
 app = Flask(__name__)
+socketio = flask_socketio.SocketIO(app)
 
-log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
-log.setLevel(logging.ERROR) # Stop flask from logging each button click
+@socketio.on('json_transfer_to_client')
+def handle_socket_event(data):
+    print(f"Received JSON: {data}")
+    return
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/sync', methods=['POST'])
+def sync():
+    emit_json_data_thread = threading.Thread(target=emit_json_data, daemon=True)
+    emit_json_data_thread.start()
+    return redirect(url_for('index'))
 
 @app.route('/import_file', methods=['POST'])
 def import_file():
@@ -91,18 +109,26 @@ def import_directory():
     convertAllFilesInDir(dir)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
-def run_flask_app():
-    app.run(port=5000)
+def run_flask_app(): # will execute the rest after the flask app is started, timing is weird chatgpt told me how to do this
+    socketio.run(app, port=5000)
+    return
 
-# Function calls
+def emit_json_data():
+    print("emitting")
+    json_files = getJSONFilesFromDirectory(MODEL_FOLDER_PATH)
+    json_dict = createJSONDictFromFilePathList(json_files)
+    print(json_dict)
+    socketio.emit('json_transfer_to_server', json_dict)
+    return
+
+
 if __name__ == '__main__':
-    print(getJSONFilesFromDirectory(MODEL_FOLDER_PATH))
+    log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
+    log.setLevel(logging.ERROR) # Stop flask from logging each button click
+
     # Start Flask app in a separate thread
     flask_thread = threading.Thread(target=run_flask_app, daemon=True)
     flask_thread.start()
-
-    # Wait so thread can start
-    time.sleep(1)
 
     # Start PyQt application
     Qapp = PyQt6.QtWidgets.QApplication(sys.argv)
