@@ -90,6 +90,7 @@ for current_argument in sys.argv:
     "originalModelName": "{current_basename}",
     "originalExtension": "{current_extension}",
     "modelDisplayName": "{current_basename}"
+    "modelCategory": "None",
 }}
 """
 

@@ -16,7 +16,7 @@ import sys
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "models"
+MODEL_FOLDER_PATH = "src/models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -39,10 +39,7 @@ def getJSONFilesFromDirectory(dir_path):
         for filename in filenames:
             if filename.lower().endswith(".json"):
                 matched_files.append(os.path.join(dirpath, filename))
-
     return matched_files
-
-
 
 def convertFile(file_path):
     os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
@@ -99,6 +96,7 @@ def run_flask_app():
 
 # Function calls
 if __name__ == '__main__':
+    print(getJSONFilesFromDirectory(MODEL_FOLDER_PATH))
     # Start Flask app in a separate thread
     flask_thread = threading.Thread(target=run_flask_app, daemon=True)
     flask_thread.start()
