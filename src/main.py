@@ -1,5 +1,6 @@
 import PyQt6.QtWidgets
 import PyQt6.QtWebEngineWidgets
+from PyQt6.QtWebEngineCore import QWebEnginePage
 import PyQt6.QtCore
 import PyQt6.QtGui
 import PyQt6
@@ -24,15 +25,23 @@ RED = colorama.Fore.RED
 colorama.init(autoreset=True)
 
 # Class definitions
+class CustomWebEnginePage(QWebEnginePage):
+    def javaScriptConsoleMessage(self, level, message, line, sourceID):
+        print(f"JS Console [{level}] from {sourceID}:{line} - {message}") # Override to print console messages
+
 class MainWindow(PyQt6.QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("3DVisUploader")
         self.setWindowIcon(PyQt6.QtGui.QIcon(ICON_PATH))
         self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
+        self.browser.setPage(CustomWebEnginePage(self.browser))
         self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
         self.showMaximized()
+
+    def handle_console_message(self, level, message, line, sourceID):
+        print(f"JS Console [{level}] from {sourceID}:{line} - {message}")
 
 # Function definitions
 def getJSONFilesFromDirectory(dir_path):
@@ -82,7 +91,15 @@ def convertAllFilesInDir(dir_path):
 app = Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
-@socketio.on('json_transfer_to_client')
+@socketio.on('connect')
+def handle_socket_connect():
+    print("Client connected")
+    json_files = getJSONFilesFromDirectory(MODEL_FOLDER_PATH)
+    model_data = createJSONDictFromFilePathList(json_files)
+    socketio.emit('json_transfer_to_js', model_data)
+    return
+
+@socketio.on('json_transfer_to_python')
 def handle_socket_event(data):
     print(f"Received JSON: {data}")
     return
@@ -90,12 +107,6 @@ def handle_socket_event(data):
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/sync', methods=['POST'])
-def sync():
-    emit_json_data_thread = threading.Thread(target=emit_json_data, daemon=True)
-    emit_json_data_thread.start()
-    return redirect(url_for('index'))
 
 @app.route('/import_file', methods=['POST'])
 def import_file():
@@ -109,26 +120,17 @@ def import_directory():
     convertAllFilesInDir(dir)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
-def run_flask_app(): # will execute the rest after the flask app is started, timing is weird chatgpt told me how to do this
+def run_flask_app():
     socketio.run(app, port=5000)
-    return
-
-def emit_json_data():
-    print("emitting")
-    json_files = getJSONFilesFromDirectory(MODEL_FOLDER_PATH)
-    json_dict = createJSONDictFromFilePathList(json_files)
-    print(json_dict)
-    socketio.emit('json_transfer_to_server', json_dict)
     return
 
 
 if __name__ == '__main__':
-    log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
-    log.setLevel(logging.ERROR) # Stop flask from logging each button click
+    #log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
+    #log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
     # Start Flask app in a separate thread
-    flask_thread = threading.Thread(target=run_flask_app, daemon=True)
-    flask_thread.start()
+    threading.Thread(target=run_flask_app).start()
 
     # Start PyQt application
     Qapp = PyQt6.QtWidgets.QApplication(sys.argv)

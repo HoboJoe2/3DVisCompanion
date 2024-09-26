@@ -1,10 +1,10 @@
-var modelData = {}
+var modelData = {"models": "nothing"};
 
-const socket = io();
+var socket = io.connect(window.location.origin);
 
 // Update the table's data
 function populateTable() {
-    console.log("populating table")
+    console.log("populating table");
     const $tableBody = $("#jsonTable tbody");
     $tableBody.empty(); // Clear the table body
 
@@ -21,13 +21,13 @@ function populateTable() {
         `;
         $tableBody.append(row);
     });
-    socket.emit('json_transfer_to_client', "modelData");
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaamodeldata is")
-    console.log(modelData)
+    console.log("table populated");
+    socket.emit('json_transfer_to_python', modelData);
 }
 
 // Update a row's data
 $(document).on('click', '.update-btn', function() {
+    console.log("updating");
     const path = $(this).data("path");
     const row = $(this).closest('tr');
     const newName = row.find('.name-input').val();
@@ -44,23 +44,27 @@ $(document).on('click', '.update-btn', function() {
 
 // Delete a row's data
 $(document).on('click', '.delete-btn', function() {
+    console.log("deleting");
     const path = $(this).data("path");
     delete modelData[path];  // Delete the entry
     populateTable();  // Re-populate the table after deletion
 });
 
-socket.on('json_transfer_to_server', function(data) {
-    console.log("aaaa");
-    //modelData = data;
-    console.log("hi");
-    //console.log(data);
-    //console.log(modelData);
-    //populateTable();
+socket.on('json_transfer_to_js', function(data) {
+    console.log("json_transfer_to_js recieved");
+    console.log(JSON.stringify(data));
+    modelData = data;
+});
+
+socket.on('connect', function() {
+    console.log("connected");
+    populateTable();
 });
 
 $(document).on('click', '#btn', function() {
-    console.log("clicked");
-    console.log(modelData);
+    console.log("clicked, modeldatainjsis");
+    console.log(JSON.stringify(modelData));
+    socket.emit('json_transfer_to_python', {"hi_py": "hi"});
 })
 
 $(document).ready(function() {
