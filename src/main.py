@@ -144,7 +144,7 @@ if __name__ == '__main__':
     #log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
     # Start Flask app in a separate thread
-    threading.Thread(target=run_flask_app).start()
+    threading.Thread(target=run_flask_app, daemon=True).start()
 
     # Start PyQt application
     Qapp = PyQt6.QtWidgets.QApplication(sys.argv)
