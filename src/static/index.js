@@ -9,7 +9,11 @@ function populateTable() {
     $tableBody.empty(); // Clear the table body
 
     $.each(modelData, function(path, metadata) {
-        const row = `
+        var nameFilterValue = $('#namefilter').val();
+        var categoryFilterValue = $('#categoryfilter').val();
+        console.log("vals" + nameFilterValue + " " + categoryFilterValue + " " + metadata.modelDisplayName + " " + metadata.modelCategory);
+        if ((!nameFilterValue && !categoryFilterValue) || (metadata.modelDisplayName.includes(nameFilterValue) && metadata.modelCategory.includes(categoryFilterValue))) {
+            const row = `
             <tr>
                 <td><input type="text" value="${metadata.modelDisplayName}" class="display-input"></td>
                 <td><input type="text" value="${metadata.modelCategory}" class="category-input"></td>
@@ -20,6 +24,7 @@ function populateTable() {
             </tr>
         `;
         $tableBody.append(row);
+        }
     });
     console.log("table populated");
     socket.emit('json_transfer_to_python', modelData);
@@ -60,6 +65,11 @@ socket.on('connect', function() {
     console.log("connected");
     populateTable();
 });
+
+$('.filter').on('input', function() {
+    console.log("input from input");
+    populateTable();
+})
 
 $(document).on('click', '#btn', function() {
     console.log("clicked, modeldatainjsis");

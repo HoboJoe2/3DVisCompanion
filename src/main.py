@@ -15,11 +15,13 @@ import logging
 import time
 import sys
 import json
+import asyncio
+import shutil
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "src\\models"
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -59,9 +61,18 @@ def createJSONDictFromFilePathList(file_path_list):
             json_dict[json_path] = json.load(json_file)
     return json_dict
 
-def convertFile(file_path):
-    os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
+def updateAndDeleteJSONFiles(json_dict):
+    print("starting to update and delete json files")
+    for json_file_path in getJSONFilesFromDirectory(MODEL_FOLDER_PATH):
+        if json_file_path not in json_dict.keys():
+            shutil.rmtree(os.path.dirname(json_file_path))
+    for json_file_path, json_data in json_dict.items():
+        with open(json_file_path, 'w') as json_file:
+            json.dump(json_data, json_file)
+    print("finished updating and deleting json files")
+    return
 
+def convertFile(file_path):
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
@@ -102,6 +113,7 @@ def handle_socket_connect():
 @socketio.on('json_transfer_to_python')
 def handle_socket_event(data):
     print(f"Received JSON: {data}")
+    updateAndDeleteJSONFiles(data)
     return
 
 @app.route('/')
@@ -111,12 +123,14 @@ def index():
 @app.route('/import_file', methods=['POST'])
 def import_file():
     path = filedialpy.openFile() # Get single file path
+    os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
     convertFile(path)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
 @app.route('/import_directory', methods=['POST'])
 def import_directory():
     dir = filedialpy.openDir() # Get directory path
+    os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
     convertAllFilesInDir(dir)
     return redirect(url_for('index'))  # Redirect back to the homepage
 
