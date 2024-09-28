@@ -32,7 +32,7 @@ function populateTable() {
 
 // Update a row's data
 $(document).on('click', '.update-btn', function() {
-    console.log("updating");
+    $("#status").text("Updating...");
     const path = $(this).data("path");
     const row = $(this).closest('tr');
     const newName = row.find('.name-input').val();
@@ -45,14 +45,32 @@ $(document).on('click', '.update-btn', function() {
     modelData[path].modelCategory = newCategory;
 
     populateTable();  // Re-populate the table after update
+    $("#status").text("Model updated.");
+    setTimeout(function() {
+        $("#status").text("");
+    }, 2000);
 });
 
 // Delete a row's data
 $(document).on('click', '.delete-btn', function() {
-    console.log("deleting");
+    $("#status").text("Deleting...");
     const path = $(this).data("path");
-    delete modelData[path];  // Delete the entry
-    populateTable();  // Re-populate the table after deletion
+    if (confirm("Are you sure you want to delete this model?")) {
+        delete modelData[path];  // Delete the entry
+        populateTable();  // Re-populate the table after deletion
+    }
+    $("#status").text("Model deleted.");
+    setTimeout(function() {
+        $("#status").text("");
+    }, 2000);
+});
+
+$(document).on('click', '#importButton', function() {
+    $("#status").text("Importing model...");
+});
+
+$(document).on('click', '#importAllButton', function() {
+    $("#status").text("Importing all models...");
 });
 
 socket.on('json_transfer_to_js', function(data) {

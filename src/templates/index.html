@@ -27,11 +27,11 @@
                 </p>
                 <div class="flex-parent jc-center">
                     <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
-                        <button type="submit">IMPORT OBJECT</button>
+                        <button type="submit" id="importButton">IMPORT OBJECT</button>
                     </form>
 
                     <form action="{{ url_for('import_directory') }}" method="post">
-                        <button type="submit">IMPORT ALL FROM FOLDER</button>
+                        <button type="submit" id="importAllButton">IMPORT ALL FROM FOLDER</button>
                     </form>
                 </div>
             </div>
@@ -40,6 +40,9 @@
             <input type="text" id="namefilter" class="filter" placeholder="namefilter"></input><br>
             <input type="text" id="categoryfilter" class="filter" placeholder="categoryfilter"></input>
         </div>
+        <p id="status">
+                    
+        </p>
         <div>
             <table id="jsonTable" border="1">
                 <thead>
