@@ -24,23 +24,16 @@ RED = colorama.Fore.RED
 colorama.init(autoreset=True)
 
 # Class definitions
-class CustomWebEnginePage(QWebEnginePage):
-    def javaScriptConsoleMessage(self, level, message, line, sourceID):
-        print(f"JS Console [{level}] from {sourceID}:{line} - {message}") # Override to print console messages
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("3DVisUploader")
         self.setWindowIcon(QIcon(ICON_PATH))
         self.browser = QWebEngineView()
-        self.browser.setPage(CustomWebEnginePage(self.browser))
+        self.browser.setPage(QWebEnginePage(self.browser))
         self.browser.setUrl(QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
         self.showMaximized()
-
-    def handle_console_message(self, level, message, line, sourceID):
-        print(f"JS Console [{level}] from {sourceID}:{line} - {message}")
 
 # Function definitions
 def getJSONFilesFromDirectory(dir_path):
@@ -59,14 +52,12 @@ def createJSONDictFromFilePathList(file_path_list):
     return json_dict
 
 def updateAndDeleteJSONFiles(json_dict):
-    print("starting to update and delete json files")
     for json_file_path in getJSONFilesFromDirectory(MODEL_FOLDER_PATH):
         if json_file_path not in json_dict.keys():
             shutil.rmtree(os.path.dirname(json_file_path))
     for json_file_path, json_data in json_dict.items():
         with open(json_file_path, 'w') as json_file:
             json.dump(json_data, json_file)
-    print("finished updating and deleting json files")
     return
 
 def convertFile(file_path):
@@ -101,16 +92,14 @@ socketio = flask_socketio.SocketIO(app)
 
 @socketio.on('connect')
 def handle_socket_connect():
-    print("Client connected")
     json_files = getJSONFilesFromDirectory(MODEL_FOLDER_PATH)
     model_data = createJSONDictFromFilePathList(json_files)
-    socketio.emit('json_transfer_to_js', model_data)
+    socketio.emit('json_transfer_to_js', model_data) # Send a dictionary to the frontend to populate the table on connection
     return
 
 @socketio.on('json_transfer_to_python')
 def handle_socket_event(data):
-    print(f"Received JSON: {data}")
-    updateAndDeleteJSONFiles(data)
+    updateAndDeleteJSONFiles(data) # Update and delete json files when data is received from frontend (when user changes a name or deletes a model)
     return
 
 @app.route('/')

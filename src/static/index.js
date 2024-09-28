@@ -71,8 +71,6 @@ $(document).on('click', '#importAllButton', function() {
 });
 
 socket.on('json_transfer_to_js', function(data) {
-    console.log("json_transfer_to_js recieved");
-    console.log(JSON.stringify(data));
     modelData = data;
 });
 
