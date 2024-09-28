@@ -7,11 +7,11 @@ a = Analysis(
     binaries=[],
     datas=[
     ('Blender 4.2', 'Blender 4.2'),
-    ('2gltf2_3DVis', '2gltf2_3DVis'),
     ('templates', 'templates'),
     ('static', 'static'),
     ('convert.ps1', '.'),
     ('icon.png', '.'),
+    ('2gltf2.py', '.'),
     ],
     hiddenimports=[],
     hookspath=[],

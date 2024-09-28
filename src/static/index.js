@@ -4,14 +4,12 @@ var socket = io.connect(window.location.origin);
 
 // Update the table's data
 function populateTable() {
-    console.log("populating table");
     const $tableBody = $("#jsonTable tbody");
     $tableBody.empty(); // Clear the table body
 
     $.each(modelData, function(path, metadata) {
         var nameFilterValue = $('#namefilter').val();
         var categoryFilterValue = $('#categoryfilter').val();
-        console.log("vals" + nameFilterValue + " " + categoryFilterValue + " " + metadata.modelDisplayName + " " + metadata.modelCategory);
         if ((!nameFilterValue && !categoryFilterValue) || (metadata.modelDisplayName.includes(nameFilterValue) && metadata.modelCategory.includes(categoryFilterValue))) {
             const row = `
             <tr>
@@ -26,7 +24,6 @@ function populateTable() {
         $tableBody.append(row);
         }
     });
-    console.log("table populated");
     socket.emit('json_transfer_to_python', modelData);
 }
 
@@ -34,17 +31,16 @@ function populateTable() {
 $(document).on('click', '.update-btn', function() {
     $("#status").text("Updating...");
     const path = $(this).data("path");
-    const row = $(this).closest('tr');
-    const newName = row.find('.name-input').val();
+    const row = $(this).closest('tr');;
     const newDisplayName = row.find('.display-input').val();
     const newCategory = row.find('.category-input').val();
 
     // Update the model data
-    modelData[path].originalModelName = newName;
     modelData[path].modelDisplayName = newDisplayName;
     modelData[path].modelCategory = newCategory;
 
     populateTable();  // Re-populate the table after update
+
     $("#status").text("Model updated.");
     setTimeout(function() {
         $("#status").text("");
@@ -59,6 +55,7 @@ $(document).on('click', '.delete-btn', function() {
         delete modelData[path];  // Delete the entry
         populateTable();  // Re-populate the table after deletion
     }
+
     $("#status").text("Model deleted.");
     setTimeout(function() {
         $("#status").text("");
@@ -80,23 +77,14 @@ socket.on('json_transfer_to_js', function(data) {
 });
 
 socket.on('connect', function() {
-    console.log("connected");
     populateTable();
 });
 
 $('.filter').on('input', function() {
-    console.log("input from input");
     populateTable();
 })
 
-$(document).on('click', '#btn', function() {
-    console.log("clicked, modeldatainjsis");
-    console.log(JSON.stringify(modelData));
-    socket.emit('json_transfer_to_python', {"hi_py": "hi"});
-})
-
 $(document).ready(function() {
-    console.log("dom is ready");
     $("#rotate").on({
         mouseenter() {
             $(this).addClass("logo");

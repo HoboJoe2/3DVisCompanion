@@ -1,10 +1,9 @@
-import PyQt6.QtWidgets
-import PyQt6.QtWebEngineWidgets
+from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWebEngineCore import QWebEnginePage
-import PyQt6.QtCore
-import PyQt6.QtGui
-import PyQt6
-from flask import Flask, redirect, url_for, render_template
+from PyQt6.QtCore import QUrl
+from PyQt6.QtGui import QIcon
+import flask
 import flask_socketio
 import os
 import filedialpy
@@ -12,16 +11,14 @@ import subprocess
 import threading
 import colorama
 import logging
-import time
 import sys
 import json
-import asyncio
 import shutil
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models"
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -31,14 +28,14 @@ class CustomWebEnginePage(QWebEnginePage):
     def javaScriptConsoleMessage(self, level, message, line, sourceID):
         print(f"JS Console [{level}] from {sourceID}:{line} - {message}") # Override to print console messages
 
-class MainWindow(PyQt6.QtWidgets.QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("3DVisUploader")
-        self.setWindowIcon(PyQt6.QtGui.QIcon(ICON_PATH))
-        self.browser = PyQt6.QtWebEngineWidgets.QWebEngineView()
+        self.setWindowIcon(QIcon(ICON_PATH))
+        self.browser = QWebEngineView()
         self.browser.setPage(CustomWebEnginePage(self.browser))
-        self.browser.setUrl(PyQt6.QtCore.QUrl('http://127.0.0.1:5000')) # URL of your Flask app
+        self.browser.setUrl(QUrl('http://127.0.0.1:5000')) # URL of your Flask app
         self.setCentralWidget(self.browser)
         self.showMaximized()
 
@@ -99,7 +96,7 @@ def convertAllFilesInDir(dir_path):
         convertFile(file)
     return
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
 @socketio.on('connect')
@@ -118,21 +115,21 @@ def handle_socket_event(data):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return flask.render_template('index.html')
 
 @app.route('/import_file', methods=['POST'])
 def import_file():
     path = filedialpy.openFile() # Get single file path
     os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
     convertFile(path)
-    return redirect(url_for('index'))  # Redirect back to the homepage
+    return flask.redirect(flask.url_for('index'))  # Redirect back to the homepage
 
 @app.route('/import_directory', methods=['POST'])
 def import_directory():
     dir = filedialpy.openDir() # Get directory path
     os.chdir(SCRIPT_DIR) # Necessary since opening the file dialogue changes the working directory 
     convertAllFilesInDir(dir)
-    return redirect(url_for('index'))  # Redirect back to the homepage
+    return flask.redirect(flask.url_for('index'))  # Redirect back to the homepage
 
 def run_flask_app():
     socketio.run(app, port=5000)
@@ -140,13 +137,13 @@ def run_flask_app():
 
 
 if __name__ == '__main__':
-    #log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
-    #log.setLevel(logging.ERROR) # Stop flask from logging each button click
+    log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
+    log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
     # Start Flask app in a separate thread
     threading.Thread(target=run_flask_app, daemon=True).start()
 
     # Start PyQt application
-    Qapp = PyQt6.QtWidgets.QApplication(sys.argv)
+    Qapp = QApplication(sys.argv)
     window = MainWindow()
     sys.exit(Qapp.exec())

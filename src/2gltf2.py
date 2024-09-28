@@ -20,25 +20,17 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
-
-#
-# Imports
 #
 
 import bpy
 import os
 import sys
+import datetime
 
-#
-# Globals
-#
+MODEL_FOLDER_PATH = os.getcwd() # "\\CAVE-HEADNODE\data\3dvis\models"
 
-#
-# Functions
-#
-
-current_directory = os.getcwd()
+def generateUniqueFolderName(model_name):
+    return f"""{model_name}({datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")})"""
 
 force_continue = True
 
@@ -49,18 +41,17 @@ for current_argument in sys.argv:
             force_continue = False
         continue
 
-    #
-
     root, current_extension = os.path.splitext(current_argument)
     current_basename = os.path.basename(root)
 
-    if current_extension != ".abc" and current_extension != ".blend" and current_extension != ".dae" and current_extension != ".fbx" and current_extension != ".obj" and current_extension != ".ply" and current_extension != ".stl" and current_extension != ".usd" and current_extension != ".usda" and current_extension != ".usdc" and current_extension != ".wrl" and current_extension != ".x3d":
+    # This would be nicer as an if else with else: continue at the end instead of a bunch of if statements but it works
+    if current_extension != ".gltf" and current_extension != ".glb" and current_extension != ".abc" and current_extension != ".blend" and current_extension != ".dae" and current_extension != ".fbx" and current_extension != ".obj" and current_extension != ".ply" and current_extension != ".stl" and current_extension != ".usd" and current_extension != ".usda" and current_extension != ".usdc" and current_extension != ".usdz" and current_extension != ".wrl" and current_extension != ".x3d":
         continue
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    print("Converting: '" + current_argument + "'")
 
-    #
+    if current_extension == ".gltf" or current_extension == ".glb":
+        bpy.ops.import_scene.gltf(filepath=current_argument)
 
     if current_extension == ".abc":
         bpy.ops.wm.alembic_import(filepath=current_argument)    
@@ -75,7 +66,7 @@ for current_argument in sys.argv:
         bpy.ops.import_scene.fbx(filepath=current_argument)    
 
     if current_extension == ".obj":
-        bpy.ops.import_scene.obj(filepath=current_argument)    
+        bpy.ops.wm.obj_import(filepath=current_argument)    
 
     if current_extension == ".ply":
         bpy.ops.import_mesh.ply(filepath=current_argument)    
@@ -83,14 +74,27 @@ for current_argument in sys.argv:
     if current_extension == ".stl":
         bpy.ops.import_mesh.stl(filepath=current_argument)
 
-    if current_extension == ".usd" or current_extension == ".usda" or current_extension == ".usdc":
+    if current_extension == ".usd" or current_extension == ".usda" or current_extension == ".usdc" or current_extension == ".usdz":
         bpy.ops.wm.usd_import(filepath=current_argument)
 
     if current_extension == ".wrl" or current_extension == ".x3d":
         bpy.ops.import_scene.x3d(filepath=current_argument)
 
-    #
+    model_file_name = f"{current_basename}{current_extension}" # Only used to generate folder name, models are renamed to scene.gltf
+    model_folder_name = generateUniqueFolderName(model_file_name)
+    export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
+    os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
 
-    export_file = current_directory + "/" + current_basename + ".gltf"
-    print("Writing: '" + export_file + "'")
-    bpy.ops.export_scene.gltf(filepath=export_file)
+    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
+
+    json_metadata = f"""
+{{
+    "originalModelName": "{current_basename}",
+    "originalExtension": "{current_extension}",
+    "modelDisplayName": "{current_basename}",
+    "modelCategory": ""
+}}
+"""
+
+    with open(f"{export_dir}\\metadata.json", "w") as f:
+        f.write(json_metadata)

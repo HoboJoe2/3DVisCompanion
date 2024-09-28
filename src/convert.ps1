@@ -14,9 +14,9 @@ if (!(Test-Path $outputFolder)) {
     New-Item -ItemType Directory -Path $outputFolder
 }
 
-$originalFolder = (Get-Location).Path
+$originalFolder = (Get-Location).Path # Gets the location the script is running from
 
 Set-Location $outputFolder
 
 # -b is for background mode, -P means "run python script [script]", -- seperates the args for blender from the args for python
-& "$originalFolder\Blender 4.2\blender.exe" -b -P "$originalFolder\2gltf2_3DVis\2gltf2.py" -- $modelPath
+& "$originalFolder\Blender 4.2\blender.exe" -b -P "$originalFolder\2gltf2.py" -- $modelPath
