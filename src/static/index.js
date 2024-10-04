@@ -1,11 +1,11 @@
 var jsonData = {
-    "models": {},
-    "scenes": {},
+    "models": [],
+    "scenes": [],
 };
 
 var socket = io.connect(window.location.origin);
 
-// Update the table's data
+// Update the tables data
 function populateTables() {
     const $modelsTableBody = $("#modelsTable tbody");
     const $scenesTableBody = $("#scenesTable tbody");
@@ -44,7 +44,7 @@ function populateTables() {
                 <td><input type="text" value="${metadata.sceneCategory}" class="category-input"></td>
                 <td>
                     <button class="update-btn" data-path="${path}" data-objecttype="scene">Update</button>
-                    <button class="delete-btn" data-path="${path} data-objecttype="scene">Delete</button>
+                    <button class="delete-btn" data-path="${path}" data-objecttype="scene">Delete</button>
                 </td>
             </tr>
         `;

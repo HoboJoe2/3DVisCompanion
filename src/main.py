@@ -84,7 +84,7 @@ def updateAndDeleteJSONFiles(recieved_json_data):
         for json_item in generated_json_data[object_type]:
             for json_path in json_item.keys():
                 for recieved_json_item in recieved_json_data[object_type]:
-                    if json_path in recieved_json_item.keys():
+                    if json_path not in recieved_json_item.keys():
                         send2trash.send2trash(os.path.dirname(json_path))
     return
 
