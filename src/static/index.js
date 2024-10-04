@@ -1,10 +1,10 @@
-var modelData = {"models": "nothing"};
+var modelData = {};
 
 var socket = io.connect(window.location.origin);
 
 // Update the table's data
 function populateTable() {
-    const $tableBody = $("#jsonTable tbody");
+    const $tableBody = $("#modelsTable tbody");
     $tableBody.empty(); // Clear the table body
 
     $.each(modelData, function(path, metadata) {
