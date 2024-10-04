@@ -18,7 +18,7 @@ import shutil
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models"
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" "" C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -64,7 +64,8 @@ def convertFile(file_path):
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
-        result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        #result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(f""""Blender 4.2\\blender.exe" -b -P 2gltf2.py -- -modelPath "{file_path}""""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(BLUE + "--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n\n", result.stdout.decode())
         print(BLUE + "--- STANDARD ERROR OUTPUT FROM POWERSHELL FILE ---\n\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
@@ -86,6 +87,10 @@ def convertAllFilesInDir(dir_path):
     for file in matched_files:
         convertFile(file)
     return
+
+def createModelPath(dir_path):
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
@@ -126,6 +131,7 @@ def run_flask_app():
 
 
 if __name__ == '__main__':
+    createModelPath(MODEL_FOLDER_PATH)
     log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
     log.setLevel(logging.ERROR) # Stop flask from logging each button click
 

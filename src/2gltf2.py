@@ -27,7 +27,7 @@ import os
 import sys
 import datetime
 
-MODEL_FOLDER_PATH = os.getcwd() # "\\CAVE-HEADNODE\data\3dvis\models"
+MODEL_FOLDER_PATH = "models" # "\\CAVE-HEADNODE\data\3dvis\models"
 
 def generateUniqueFolderName(model_name):
     return f"""{model_name}({datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")})"""
