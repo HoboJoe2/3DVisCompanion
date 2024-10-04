@@ -18,8 +18,8 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" "" C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models
-SCENE_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\scenes"
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" #"C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" # 
+SCENE_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\scenes"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -38,59 +38,54 @@ class MainWindow(QMainWindow):
 
         # Connect loadFinished signal to the method that will inject JavaScript
         self.browser.loadFinished.connect(self.on_load_finished)
+        return
 
     def on_load_finished(self):
         # Inject custom JavaScript to hide the scrollbar after the page has finished loading
-        self.browser.page().runJavaScript("""
-            var style = document.createElement('style');
-            style.innerHTML = '::-webkit-scrollbar { display: none; } body { overflow: hidden; }';
-            document.head.appendChild(style);
-        """)
+        if self.browser.page():
+            self.browser.page().runJavaScript("""
+                var style = document.createElement('style');
+                style.innerHTML = '::-webkit-scrollbar { display: none; } body { overflow: hidden; }';
+                document.head.appendChild(style);
+            """)
+        return
 
 # Function definitions
 def getJSONFilesFromDirectories(models_path, scenes_path):
-    matched_files = {
+    json_dict = {
         "models": [],
         "scenes": []
     }
+
     for dirpath, dirnames, filenames in os.walk(models_path):
         for filename in filenames:
             if filename.lower().endswith(".json"):
-                matched_files["models"].append(os.path.join(dirpath, filename))
+                json_object = {}
+                json_file_path = os.path.join(dirpath, filename)
+                with open(json_file_path, 'r') as json_file:
+                    json_object[json_file_path] = json.load(json_file)
+                json_dict["models"].append(json_object)
+
     for dirpath, dirnames, filenames in os.walk(scenes_path):
         for filename in filenames:
             if filename.lower().endswith(".json"):
-                matched_files["scenes"].append(os.path.join(dirpath, filename))
-    return matched_files
-
-def createJSONDictFromFilePathList(file_path_list):
-    json_dict = {
-        "models": {},
-        "scenes": {}
-    }
-    for json_path in file_path_list:
-        with open(json_path, 'r') as json_file:
-            json_dict[json_path] = json.load(json_file)
+                json_object = {}
+                json_file_path = os.path.join(dirpath, filename)
+                with open(json_file_path, 'r') as json_file:
+                    json_object[json_file_path] = json.load(json_file)
+                json_dict["scenes"].append(json_object)
     return json_dict
 
-def updateAndDeleteJSONFiles(json_dict):
-    data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
 
-    old_models = data["models"]
-    old_scenes = data["scenes"]
-    old_objects = {**old_models, **old_scenes} # combine dictionaries
-    
-    new_models = json_dict["models"]
-    new_scenes = json_dict["scenes"]
-    new_objects = {**new_models, **new_scenes} # combine dictionaries
+def updateAndDeleteJSONFiles(recieved_json_data):
+    generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
 
-    for json_file_path in old_objects:
-        if json_file_path not in new_objects:
-            send2trash.send2trash(os.path.dirname(json_file_path))
-
-    for json_file_path, json_data in new_objects.items():
-        with open(json_file_path, 'w') as json_file:
-            json.dump(json_data, json_file)
+    for object_type in generated_json_data.keys():
+        for json_item in generated_json_data[object_type]:
+            for json_path in json_item.keys():
+                for recieved_json_item in recieved_json_data[object_type]:
+                    if json_path in recieved_json_item.keys():
+                        send2trash.send2trash(os.path.dirname(json_path))
     return
 
 def convertFile(file_path):
@@ -122,8 +117,10 @@ def convertAllFilesInDir(dir_path):
     return
 
 def createModelAndScenesPath(models_path, scenes_path):
-    if not os.path.exists(models_path) and not os.path.exists(scenes_path):
+    if not os.path.exists(models_path):
         os.makedirs(models_path)
+
+    if not os.path.exists(scenes_path):
         os.makedirs(scenes_path)
     return
 
@@ -132,9 +129,9 @@ socketio = flask_socketio.SocketIO(app)
 
 @socketio.on('connect')
 def handle_socket_connect():
-    json_files = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
-    model_data = createJSONDictFromFilePathList(json_files)
-    socketio.emit('json_transfer_to_js', model_data) # Send a dictionary to the frontend to populate the table on connection
+    json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+    print(json_dict)
+    socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table on connection
     return
 
 @socketio.on('json_transfer_to_python')
