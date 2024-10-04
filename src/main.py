@@ -18,7 +18,7 @@ import shutil
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" "" C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" "C:\\Users\\vez17\\Desktop\\models"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -31,9 +31,20 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(ICON_PATH))
         self.browser = QWebEngineView()
         self.browser.setPage(QWebEnginePage(self.browser))
-        self.browser.setUrl(QUrl('http://127.0.0.1:5000')) # URL of your Flask app
+        self.browser.setUrl(QUrl('http://127.0.0.1:5000'))  # URL of your Flask app
         self.setCentralWidget(self.browser)
         self.showMaximized()
+
+        # Connect loadFinished signal to the method that will inject JavaScript
+        self.browser.loadFinished.connect(self.on_load_finished)
+
+    def on_load_finished(self):
+        # Inject custom JavaScript to hide the scrollbar after the page has finished loading
+        self.browser.page().runJavaScript("""
+            var style = document.createElement('style');
+            style.innerHTML = '::-webkit-scrollbar { display: none; } body { overflow: hidden; }';
+            document.head.appendChild(style);
+        """)
 
 # Function definitions
 def getJSONFilesFromDirectory(dir_path):
@@ -128,7 +139,6 @@ def import_directory():
 def run_flask_app():
     socketio.run(app, port=5000)
     return
-
 
 if __name__ == '__main__':
     createModelPath(MODEL_FOLDER_PATH)

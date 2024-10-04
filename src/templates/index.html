@@ -6,70 +6,100 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="{{ url_for('static', filename='tab.js') }}" defer></script>
 </head>
 <body>
+    <ul class="tabs">
+        <li data-tab-target="#import" class="active tab">Import</li>
+        <li data-tab-target="#model_management" class="tab">Model Management</li>
+        <li data-tab-target="#scene_management" class="tab">Scene Management</li>
+    </ul>
     <div class="bg"></div>
     <img id="rotate" src="{{ url_for('static',filename='3DVis-transparent.png') }}">
-    <div class="vertical">
-        <div class="horizontal relative">
-            <h1>INSTRUCTIONS</h1>
-            <div class="inner">
-                <p>
-                    This application is used to import 3D models into the 3DVis application.
-                    <br><br>
-                    It also converts models into the correct file format for 3DVis (.gltf).
-                    <br><br>
-                    Use the import object button to import a single 3D model.
-                    <br><br>
-                    Use the import all from folder to import all 3D models in a folder. This will also search recursively through any sub-folders in the folder for 3D models.
-                    <br><br>
-                    Check the command prompt window to see upload progress and errors.
-                </p>
-                <div class="flex-parent jc-center">
-                    <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
-                        <button type="submit" id="importButton">IMPORT OBJECT</button>
-                    </form>
+    <p id="status">
+                        
+    </p>
+    <div class=""tab-contents">
 
-                    <form action="{{ url_for('import_directory') }}" method="post">
-                        <button type="submit" id="importAllButton">IMPORT ALL FROM FOLDER</button>
-                    </form>
+        <div id="import" data-tab-content class="active">
+            <div class="vertical">
+                <div class="horizontal relative">
+                    <div class="nice">
+                        <h1>INSTRUCTIONS</h1>
+                        <div class="inner">
+                            <p>
+                                This application is used to import 3D models into the 3DVis application.
+                                <br><br>
+                                It also converts models into the correct file format for 3DVis (.gltf).
+                                <br><br>
+                                Use the import object button to import a single 3D model.
+                                <br><br>
+                                Use the import all from folder to import all 3D models in a folder. This will also search recursively through any sub-folders in the folder for 3D models.
+                                <br><br>
+                                Check the command prompt window to see upload progress and errors.
+                            </p>
+                            <div class="flex-parent jc-center">
+                                <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
+                                    <button type="submit" id="importButton">IMPORT OBJECT</button>
+                                </form>
+            
+                                <form action="{{ url_for('import_directory') }}" method="post">
+                                    <button type="submit" id="importAllButton">IMPORT ALL FROM FOLDER</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="filterInput">
-            <input type="text" id="namefilter" class="filter" placeholder="namefilter"></input><br>
-            <input type="text" id="categoryfilter" class="filter" placeholder="categoryfilter"></input>
-        </div>
-        <p id="status">
-                    
-        </p>
-        <div>
-            <table id="modelsTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be populated here -->
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <table id="environmentsTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows will be populated here -->
-                </tbody>
-            </table>
-        </div>
+
+        <div id="model_management" data-tab-content>
+            <div class="vertical">
+                <div class="horizontal relative">
+                    <div class="nice">
+                        <div class="corners">
+                            <div class="inner">
+                                <h1>TABLE</h1>
+                                <div id="filterInput">
+                                    <input type="text" id="namefilter" class="filter" placeholder="NAME FILTER"></input><br>
+                                    <input type="text" id="categoryfilter" class="filter" placeholder="CATERGORY FILTER"></input>
+                                </div>
+                                <div>
+                                    <table id="modelsTable" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Rows will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <table id="environmentsTable" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Rows will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div id="scene_management" data-tab-content></div>
+
     </div>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
