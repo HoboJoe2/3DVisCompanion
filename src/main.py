@@ -13,12 +13,13 @@ import colorama
 import logging
 import sys
 import json
-import shutil
+import send2trash
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
 MODEL_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" "" C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models
+SCENE_FOLDER_PATH = "C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\scenes"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -36,26 +37,47 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
 # Function definitions
-def getJSONFilesFromDirectory(dir_path):
-    matched_files = []
-    for dirpath, dirnames, filenames in os.walk(dir_path):
+def getJSONFilesFromDirectories(models_path, scenes_path):
+    matched_files = {
+        "models": [],
+        "scenes": []
+    }
+    for dirpath, dirnames, filenames in os.walk(models_path):
         for filename in filenames:
             if filename.lower().endswith(".json"):
-                matched_files.append(os.path.join(dirpath, filename))
+                matched_files["models"].append(os.path.join(dirpath, filename))
+    for dirpath, dirnames, filenames in os.walk(scenes_path):
+        for filename in filenames:
+            if filename.lower().endswith(".json"):
+                matched_files["scenes"].append(os.path.join(dirpath, filename))
     return matched_files
 
 def createJSONDictFromFilePathList(file_path_list):
-    json_dict = {}
+    json_dict = {
+        "models": {},
+        "scenes": {}
+    }
     for json_path in file_path_list:
         with open(json_path, 'r') as json_file:
             json_dict[json_path] = json.load(json_file)
     return json_dict
 
 def updateAndDeleteJSONFiles(json_dict):
-    for json_file_path in getJSONFilesFromDirectory(MODEL_FOLDER_PATH):
-        if json_file_path not in json_dict.keys():
-            shutil.rmtree(os.path.dirname(json_file_path))
-    for json_file_path, json_data in json_dict.items():
+    data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+
+    old_models = data["models"]
+    old_scenes = data["scenes"]
+    old_objects = {**old_models, **old_scenes} # combine dictionaries
+    
+    new_models = json_dict["models"]
+    new_scenes = json_dict["scenes"]
+    new_objects = {**new_models, **new_scenes} # combine dictionaries
+
+    for json_file_path in old_objects:
+        if json_file_path not in new_objects:
+            send2trash.send2trash(os.path.dirname(json_file_path))
+
+    for json_file_path, json_data in new_objects.items():
         with open(json_file_path, 'w') as json_file:
             json.dump(json_data, json_file)
     return
@@ -88,16 +110,18 @@ def convertAllFilesInDir(dir_path):
         convertFile(file)
     return
 
-def createModelPath(dir_path):
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+def createModelAndScenesPath(models_path, scenes_path):
+    if not os.path.exists(models_path) and not os.path.exists(scenes_path):
+        os.makedirs(models_path)
+        os.makedirs(scenes_path)
+    return
 
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
 @socketio.on('connect')
 def handle_socket_connect():
-    json_files = getJSONFilesFromDirectory(MODEL_FOLDER_PATH)
+    json_files = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
     model_data = createJSONDictFromFilePathList(json_files)
     socketio.emit('json_transfer_to_js', model_data) # Send a dictionary to the frontend to populate the table on connection
     return
@@ -131,7 +155,7 @@ def run_flask_app():
 
 
 if __name__ == '__main__':
-    createModelPath(MODEL_FOLDER_PATH)
+    createModelAndScenesPath(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
     log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
     log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
