@@ -42,8 +42,9 @@ class MainWindow(QMainWindow):
 
     def on_load_finished(self):
         # Inject custom JavaScript to hide the scrollbar after the page has finished loading
-        if self.browser.page():
-            self.browser.page().runJavaScript("""
+        page = self.browser.page()
+        if page:
+            page.runJavaScript("""
                 var style = document.createElement('style');
                 style.innerHTML = '::-webkit-scrollbar { display: none; } body { overflow: hidden; }';
                 document.head.appendChild(style);
@@ -74,18 +75,35 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
                 with open(json_file_path, 'r') as json_file:
                     json_object[json_file_path] = json.load(json_file)
                 json_dict["scenes"].append(json_object)
+    print("generated" + str(json_dict))
     return json_dict
 
 
 def updateAndDeleteJSONFiles(recieved_json_data):
     generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+    generated_json_paths = []
+    recieved_json_paths = []
 
     for object_type in generated_json_data.keys():
-        for json_item in generated_json_data[object_type]:
-            for json_path in json_item.keys():
-                for recieved_json_item in recieved_json_data[object_type]:
-                    if json_path not in recieved_json_item.keys():
-                        send2trash.send2trash(os.path.dirname(json_path))
+        for generated_json_item in generated_json_data[object_type]:
+            for path in generated_json_item.keys():
+                generated_json_paths.append(path)
+        for recieved_json_item in recieved_json_data[object_type]:
+            for path, json_data in recieved_json_item.items():
+                recieved_json_paths.append(path)
+                if os.path.exists(path):
+                    with open(path, 'w') as json_file:
+                        json.dump(json_data, json_file, indent=4)
+
+    for model in generated_json_data["models"]:
+        for path in model.keys():
+            if path not in recieved_json_paths:        
+                send2trash.send2trash(os.path.dirname(path))
+    
+    for scene in generated_json_data["scenes"]:
+        for path in scene.keys():
+            if path not in recieved_json_paths:
+                send2trash.send2trash(path)
     return
 
 def convertFile(file_path):
@@ -130,12 +148,13 @@ socketio = flask_socketio.SocketIO(app)
 @socketio.on('connect')
 def handle_socket_connect():
     json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
-    print(json_dict)
+    print("sending" + str(json_dict))
     socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table on connection
     return
 
 @socketio.on('json_transfer_to_python')
 def handle_socket_event(data):
+    print("recieved" + str(data))
     updateAndDeleteJSONFiles(data) # Update and delete json files when data is received from frontend (when user changes a name or deletes a model)
     return
 

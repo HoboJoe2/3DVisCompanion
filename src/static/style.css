@@ -88,7 +88,7 @@ body {
     color: #FFF;
 }
 
-#status {
+#status:not(:empty) {
     background-color: #0F1111;
     position: fixed;
     font-size: 2em;
@@ -98,6 +98,10 @@ body {
     left: 36.2%;
     z-index: 1;
     top: 40%;
+}
+
+#status:empty {
+    display: none;
 }
 
 .horizontal:not(h1) {

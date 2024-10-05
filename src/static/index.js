@@ -16,40 +16,44 @@ function populateTables() {
     modelData = jsonData["models"];
     sceneData = jsonData["scenes"];
 
-    $.each(modelData, function(path, metadata) {
-        var modelNameFilterValue = $('#modelnamefilter').val();
-        var modelCategoryFilterValue = $('#modelcategoryfilter').val();
-        if ((!modelNameFilterValue && !modelCategoryFilterValue) || (metadata.modelDisplayName.includes(modelNameFilterValue) && metadata.modelCategory.includes(modelCategoryFilterValue))) {
-            const row = `
-            <tr>
-                <td><input type="text" value="${metadata.modelDisplayName}" class="display-input"></td>
-                <td><input type="text" value="${metadata.modelCategory}" class="category-input"></td>
-                <td>
-                    <button class="update-btn" data-path="${path}" data-objecttype="model">Update</button>
-                    <button class="delete-btn" data-path="${path}" data-objecttype="model">Delete</button>
-                </td>
-            </tr>
-        `;
-        $modelsTableBody.append(row);
-        }
+    $.each(modelData, function(index, object) {
+        $.each(object, function(path, metadata) {
+            var modelNameFilterValue = $('#modelnamefilter').val();
+            var modelCategoryFilterValue = $('#modelcategoryfilter').val();
+            if ((!modelNameFilterValue && !modelCategoryFilterValue) || (metadata.modelDisplayName.includes(modelNameFilterValue) && metadata.modelCategory.includes(modelCategoryFilterValue))) {
+                const row = `
+                <tr>
+                    <td><input type="text" value="${metadata.modelDisplayName}" class="display-input"></td>
+                    <td><input type="text" value="${metadata.modelCategory}" class="category-input"></td>
+                    <td>
+                        <button class="update-btn" data-path="${path}" data-objecttype="model">Update</button>
+                        <button class="delete-btn" data-path="${path}" data-objecttype="model">Delete</button>
+                    </td>
+                </tr>
+            `;
+            $modelsTableBody.append(row);
+            }
+        });
     });
 
-    $.each(sceneData, function(path, metadata) {
-        var sceneNameFilterValue = $('#scenenamefilter').val();
-        var sceneCategoryFilterValue = $('#scenecategoryfilter').val();
-        if ((!sceneNameFilterValue && !sceneCategoryFilterValue) || (metadata.sceneDisplayName.includes(sceneNameFilterValue) && metadata.sceneCategory.includes(sceneCategoryFilterValue))) {
-            const row = `
-            <tr>
-                <td><input type="text" value="${metadata.sceneDisplayName}" class="display-input"></td>
-                <td><input type="text" value="${metadata.sceneCategory}" class="category-input"></td>
-                <td>
-                    <button class="update-btn" data-path="${path}" data-objecttype="scene">Update</button>
-                    <button class="delete-btn" data-path="${path}" data-objecttype="scene">Delete</button>
-                </td>
-            </tr>
-        `;
-        $scenesTableBody.append(row);
-        }
+    $.each(sceneData, function(index, object) {
+        $.each(object, function(path, metadata) {
+            var sceneNameFilterValue = $('#scenenamefilter').val();
+            var sceneCategoryFilterValue = $('#scenecategoryfilter').val();
+            if ((!sceneNameFilterValue && !sceneCategoryFilterValue) || (metadata.sceneDisplayName.includes(sceneNameFilterValue) && metadata.sceneCategory.includes(sceneCategoryFilterValue))) {
+                const row = `
+                <tr>
+                    <td><input type="text" value="${metadata.sceneDisplayName}" class="display-input"></td>
+                    <td><input type="text" value="${metadata.sceneCategory}" class="category-input"></td>
+                    <td>
+                        <button class="update-btn" data-path="${path}" data-objecttype="scene">Update</button>
+                        <button class="delete-btn" data-path="${path}" data-objecttype="scene">Delete</button>
+                    </td>
+                </tr>
+            `;
+            $scenesTableBody.append(row);
+            }
+        });
     });
 
     socket.emit('json_transfer_to_python', jsonData);
@@ -67,14 +71,22 @@ $(document).on('click', '.update-btn', function() {
 
     if (objectType === "model") {
         // Update the model data
-        jsonData.models[path].modelDisplayName = newName;
-        jsonData.models[path].modelCategory = newCategory;
+        $.each(jsonData.models, function(index, model) {
+            if (model[path]) {
+                model[path].modelDisplayName = newName;
+                model[path].modelCategory = newCategory;
+            }
+        });
     }
 
     if (objectType === "scene") {
         // Update the scene data
-        jsonData.scenes[path].sceneDisplayName = newName;
-        jsonData.scenes[path].sceneCategory = newCategory;
+        $.each(jsonData.scenes, function(index, scene) {
+            if (scene[path]) {
+                scene[path].sceneDisplayName = newName;
+                scene[path].sceneCategory = newCategory;
+            }
+        });
     }
 
     populateTables();  // Re-populate the table after update
@@ -89,13 +101,26 @@ $(document).on('click', '.update-btn', function() {
 $(document).on('click', '.delete-btn', function() {
     $("#status").text("Deleting...");
 
+    const objectType = $(this).data("objecttype");
     const path = $(this).data("path");
     if (confirm("Are you sure you want to delete this?")) {
-        if (jsonData.models && jsonData.models[path]) {
-            delete jsonData.models[path];
-          } else if (jsonData.scenes && jsonData.scenes[path]) {
-            delete jsonData.scenes[path];
-          }
+        if (objectType === "model") {
+            // Update the model data
+            $.each(jsonData.models, function(index, model) {
+                if (model[path]) {
+                    delete model[path]
+                }
+            });
+        }
+    
+        if (objectType === "scene") {
+            // Update the scene data
+            $.each(jsonData.scenes, function(index, scene) {
+                if (scene[path]) {
+                    delete scene[path]
+                }
+            });
+        }    
         populateTables();  // Re-populate the table after deletion
     }
 
@@ -121,7 +146,7 @@ socket.on('connect', function() {
     populateTables();
 });
 
-$('.filter').on('input', function() {
+$(document).on('input', '.filter', function() {
     populateTables();
 })
 

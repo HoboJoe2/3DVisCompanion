@@ -17,9 +17,7 @@
     </ul>
     <div class="bg"></div>
     <img id="rotate" src="{{ url_for('static',filename='3DVis-transparent.png') }}">
-    <p id="status">
-                        
-    </p>
+    <p id="status"></p>
     <div class="tab-contents">
 
         <div id="import" data-tab-content class="active">
@@ -60,13 +58,13 @@
                     <div class="nice">
                         <div class="corners">
                             <div class="inner">
-                                <h1>TABLE</h1>
-                                <div id="filterInput">
-                                    <input type="text" id="namefilter" class="filter" placeholder="NAME FILTER"></input><br>
-                                    <input type="text" id="categoryfilter" class="filter" placeholder="CATERGORY FILTER"></input>
+                                <h1>MODELS</h1>
+                                <div id="modelsFilterInput">
+                                    <input type="text" id="modelnamefilter" class="filter" placeholder="NAME FILTER"></input><br>
+                                    <input type="text" id="modelcategoryfilter" class="filter" placeholder="CATERGORY FILTER"></input>
                                 </div>
                                 <div>
-                                    <table id="modelsTable" border="1">
+                                    <table id="modelsTable">
                                         <thead>
                                             <tr>
                                                 <th>Name</th>
@@ -79,27 +77,42 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div>
-                                    <table id="scenesTable" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Category</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Rows will be populated here -->
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-        <div id="scene_management" data-tab-content></div>
-
+        <div id="scene_management" data-tab-content>
+            <div class="vertical">
+                <div class="horizontal relative">
+                    <div class="nice">
+                        <div class="corners">
+                            <div class="inner">
+                                <h1>SCENES</h1>
+                                <div id="scenesFilterInput">
+                                    <input type="text" id="scenenamefilter" class="filter" placeholder="NAME FILTER"></input><br>
+                                    <input type="text" id="scenecategoryfilter" class="filter" placeholder="CATERGORY FILTER"></input>
+                                </div>
+                                <table id="scenesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Category</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Rows will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
