@@ -137,7 +137,7 @@ def run_flask_app():
 
 # These 2 lines have to be outside the main logic for the function decorators
 app = flask.Flask(__name__)
-socketio = flask_socketio.SocketIO(app)
+socketio = flask_socketio.SocketIO(app, async_mode='threading')
 
 @socketio.on('connect')
 def handle_socket_connect():

@@ -28,7 +28,7 @@ import sys
 import datetime
 
 # Global variables
-MODEL_FOLDER_PATH = "models" # "\\CAVE-HEADNODE\data\3dvis\models"
+MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models"
 
 
 # Function definitions
