@@ -27,67 +27,61 @@ import os
 import sys
 import datetime
 
+# Global variables
 MODEL_FOLDER_PATH = "models" # "\\CAVE-HEADNODE\data\3dvis\models"
 
+
+# Function definitions
 def generateUniqueFolderName(model_name):
-    return f"""{model_name}({datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")})"""
+    return f"""{model_name}_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")}"""
 
-force_continue = True
 
-for current_argument in sys.argv:
+# Main program
+current_argument = sys.argv[-1]
 
-    if force_continue:
-        if current_argument == '--':
-            force_continue = False
-        continue
+root, current_extension = os.path.splitext(current_argument)
+current_basename = os.path.basename(root)
 
-    root, current_extension = os.path.splitext(current_argument)
-    current_basename = os.path.basename(root)
+bpy.ops.wm.read_factory_settings(use_empty=True)
 
-    # This would be nicer as an if else with else: continue at the end instead of a bunch of if statements but it works
-    if current_extension != ".gltf" and current_extension != ".glb" and current_extension != ".abc" and current_extension != ".blend" and current_extension != ".dae" and current_extension != ".fbx" and current_extension != ".obj" and current_extension != ".ply" and current_extension != ".stl" and current_extension != ".usd" and current_extension != ".usda" and current_extension != ".usdc" and current_extension != ".usdz" and current_extension != ".wrl" and current_extension != ".x3d":
-        continue
-
-    bpy.ops.wm.read_factory_settings(use_empty=True)
-
-    if current_extension == ".gltf" or current_extension == ".glb":
+match current_extension:
+    case ".gltf" | ".glb":
         bpy.ops.import_scene.gltf(filepath=current_argument)
 
-    if current_extension == ".abc":
-        bpy.ops.wm.alembic_import(filepath=current_argument)    
+    case ".abc":
+        bpy.ops.wm.alembic_import(filepath=current_argument)
 
-    if current_extension == ".blend":
+    case ".blend":
         bpy.ops.wm.open_mainfile(filepath=current_argument)
 
-    if current_extension == ".dae":
-        bpy.ops.wm.collada_import(filepath=current_argument)    
+    case ".dae":
+        bpy.ops.wm.collada_import(filepath=current_argument)
 
-    if current_extension == ".fbx":
-        bpy.ops.import_scene.fbx(filepath=current_argument)    
+    case ".fbx":
+        bpy.ops.import_scene.fbx(filepath=current_argument)
 
-    if current_extension == ".obj":
-        bpy.ops.wm.obj_import(filepath=current_argument)    
+    case ".obj":
+        bpy.ops.wm.obj_import(filepath=current_argument)
 
-    if current_extension == ".ply":
-        bpy.ops.import_mesh.ply(filepath=current_argument)    
+    case ".ply":
+        bpy.ops.import_mesh.ply(filepath=current_argument)
 
-    if current_extension == ".stl":
+    case ".stl":
         bpy.ops.import_mesh.stl(filepath=current_argument)
 
-    if current_extension == ".usd" or current_extension == ".usda" or current_extension == ".usdc" or current_extension == ".usdz":
+    case ".usd" | ".usda" | ".usdc" | ".usdz":
         bpy.ops.wm.usd_import(filepath=current_argument)
 
-    if current_extension == ".wrl" or current_extension == ".x3d":
+    case ".wrl" | ".x3d":
         bpy.ops.import_scene.x3d(filepath=current_argument)
 
-    model_file_name = f"{current_basename}{current_extension}" # Only used to generate folder name, models are renamed to scene.gltf
-    model_folder_name = generateUniqueFolderName(model_file_name)
-    export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
-    os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
+model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}")
+export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
+os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
 
-    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
+bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
 
-    json_metadata = f"""
+json_metadata = f"""
 {{
     "originalModelName": "{current_basename}",
     "originalExtension": "{current_extension}",
@@ -96,5 +90,5 @@ for current_argument in sys.argv:
 }}
 """
 
-    with open(f"{export_dir}\\metadata.json", "w") as f:
-        f.write(json_metadata)
+with open(f"{export_dir}\\metadata.json", "w") as f:
+    f.write(json_metadata)

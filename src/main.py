@@ -32,16 +32,13 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(ICON_PATH))
         self.browser = QWebEngineView()
         self.browser.setPage(QWebEnginePage(self.browser))
-        self.browser.setUrl(QUrl('http://127.0.0.1:5000'))  # URL of your Flask app
+        self.browser.setUrl(QUrl('http://127.0.0.1:5000'))
         self.setCentralWidget(self.browser)
         self.showMaximized()
-
-        # Connect loadFinished signal to the method that will inject JavaScript
-        self.browser.loadFinished.connect(self.on_load_finished)
+        self.browser.loadFinished.connect(self.on_load_finished) # Connect loadFinished signal to the method that will inject JavaScript
         return
 
-    def on_load_finished(self):
-        # Inject custom JavaScript to hide the scrollbar after the page has finished loading
+    def on_load_finished(self): # Inject custom JavaScript to hide the scrollbar after the page has finished loading
         page = self.browser.page()
         if page:
             page.runJavaScript("""
@@ -75,32 +72,32 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
                 with open(json_file_path, 'r') as json_file:
                     json_object[json_file_path] = json.load(json_file)
                 json_dict["scenes"].append(json_object)
-    print("generated" + str(json_dict))
     return json_dict
 
 
 def updateAndDeleteJSONFiles(recieved_json_data):
-    generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+    generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH) # Generated from files on filesystem
     generated_json_paths = []
     recieved_json_paths = []
 
-    for object_type in generated_json_data.keys():
+    for object_type in generated_json_data.keys(): # Will be 'models' and 'scenes'
         for generated_json_item in generated_json_data[object_type]:
             for path in generated_json_item.keys():
                 generated_json_paths.append(path)
-        for recieved_json_item in recieved_json_data[object_type]:
+        for recieved_json_item in recieved_json_data[object_type]: # recieved_json_data is recieved from frontend
             for path, json_data in recieved_json_item.items():
                 recieved_json_paths.append(path)
-                if os.path.exists(path):
+
+                if os.path.exists(path): # Update the json data with what is recieved from frontend
                     with open(path, 'w') as json_file:
                         json.dump(json_data, json_file, indent=4)
 
-    for model in generated_json_data["models"]:
+    for model in generated_json_data["models"]: # Delete if path in list of files on filesystem is not in list of files recieved from frontend
         for path in model.keys():
             if path not in recieved_json_paths:        
                 send2trash.send2trash(os.path.dirname(path))
     
-    for scene in generated_json_data["scenes"]:
+    for scene in generated_json_data["scenes"]: # Scenes just delete the path, models have to delete the parent folder
         for path in scene.keys():
             if path not in recieved_json_paths:
                 send2trash.send2trash(path)
@@ -110,14 +107,13 @@ def convertFile(file_path):
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
-        #result = subprocess.run(f"""powershell -File convert.ps1 -modelPath "{file_path}""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        result = subprocess.run(f""""Blender 4.2\\blender.exe" -b -P 2gltf2.py -- -modelPath "{file_path}""""", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(BLUE + "--- STANDARD OUTPUT FROM POWERSHELL FILE ---\n\n", result.stdout.decode())
-        print(BLUE + "--- STANDARD ERROR OUTPUT FROM POWERSHELL FILE ---\n\n", result.stderr.decode())
+        result = subprocess.run(["Blender 4.2\\blender.exe", "-b", "-P", "2gltf2.py", "--", file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(BLUE + "--- OUTPUT FROM BLENDER CONVERSION (stdout stream) ---\n\n", result.stdout.decode())
+        print(BLUE + "--- OUTPUT BLENDER CONVERSION (stderr stream) ---\n\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
-        print(RED + f"--- ERROR OCURRED DURING POWERSHELL EXECUTION: {e} ---\n\n")
+        print(RED + f"--- ERROR OCURRED DURING BLENDER CONVERSION: {e} ---\n\n")
 
-    print(BLUE + f"\n--- FINISHED IMPORT OF {file_path} ---\n\n")
+    print(BLUE + f"--- FINISHED IMPORT OF {file_path} ---\n\n")
     return
 
 def convertAllFilesInDir(dir_path):
@@ -134,27 +130,23 @@ def convertAllFilesInDir(dir_path):
         convertFile(file)
     return
 
-def createModelAndScenesPath(models_path, scenes_path):
-    if not os.path.exists(models_path):
-        os.makedirs(models_path)
-
-    if not os.path.exists(scenes_path):
-        os.makedirs(scenes_path)
+def run_flask_app():
+    socketio.run(app, port=5000)
     return
 
+
+# These 2 lines have to be outside the main logic for the function decorators
 app = flask.Flask(__name__)
 socketio = flask_socketio.SocketIO(app)
 
 @socketio.on('connect')
 def handle_socket_connect():
     json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
-    print("sending" + str(json_dict))
     socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table on connection
     return
 
 @socketio.on('json_transfer_to_python')
 def handle_socket_event(data):
-    print("recieved" + str(data))
     updateAndDeleteJSONFiles(data) # Update and delete json files when data is received from frontend (when user changes a name or deletes a model)
     return
 
@@ -176,12 +168,14 @@ def import_directory():
     convertAllFilesInDir(dir)
     return flask.redirect(flask.url_for('index'))  # Redirect back to the homepage
 
-def run_flask_app():
-    socketio.run(app, port=5000)
-    return
 
+# Main program
 if __name__ == '__main__':
-    createModelAndScenesPath(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+    # Create directories if they don't exist
+    os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
+    os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
+
+    # Configure logging
     log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask
     log.setLevel(logging.ERROR) # Stop flask from logging each button click
 
