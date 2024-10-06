@@ -89,6 +89,7 @@ def updateAndDeleteJSONFiles(recieved_json_data):
                 recieved_json_paths.append(path)
 
                 if os.path.exists(path): # Update the json data with what is recieved from frontend
+                    #json_data_string = json.dumps(json_data, indent=4) # This is to fix " character being escaped and not appearing in json conversion
                     with open(path, 'w') as json_file:
                         json.dump(json_data, json_file, indent=4)
 

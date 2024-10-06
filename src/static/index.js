@@ -99,11 +99,11 @@ $(document).on('click', '.update-btn', function() {
 
 // Delete a row's data
 $(document).on('click', '.delete-btn', function() {
-    $("#status").text("Deleting...");
-
     const objectType = $(this).data("objecttype");
     const path = $(this).data("path");
+
     if (confirm("Are you sure you want to delete this?")) {
+        $("#status").text("Deleting...");
         if (objectType === "model") {
             // Update the model data
             $.each(jsonData.models, function(index, model) {
@@ -120,11 +120,10 @@ $(document).on('click', '.delete-btn', function() {
                     delete scene[path]
                 }
             });
-        }    
+        }
+        $("#status").text("Model deleted.");
         populateTables();  // Re-populate the table after deletion
     }
-
-    $("#status").text("Model deleted.");
     setTimeout(function() {
         $("#status").text("");
     }, 2000);
@@ -158,5 +157,12 @@ $(document).ready(function() {
         animationend() {
             $(this).removeClass("logo");
         },
+    });
+
+    $(document).on('keydown', function(event) {
+        if (event.key === '"') {
+            event.preventDefault();
+            alert('Double quotes are not allowed');
+        }
     });
 })
