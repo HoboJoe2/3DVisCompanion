@@ -72,9 +72,6 @@ match current_extension:
     case ".usd" | ".usda" | ".usdc" | ".usdz":
         bpy.ops.wm.usd_import(filepath=current_argument)
 
-    case ".wrl" | ".x3d":
-        bpy.ops.import_scene.x3d(filepath=current_argument)
-
 model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}")
 export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
 os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
