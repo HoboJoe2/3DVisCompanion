@@ -122,7 +122,7 @@ def convertFile(file_path):
 
 def convertAllFilesInDir(dir_path):
     matched_files = []
-    extensions = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.glb', '.gltf', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.wrl', '.x3d']
+    extensions = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', 'usdz', '.wrl', '.x3d']
     for dirpath, dirnames, filenames in os.walk(dir_path):
         for filename in filenames:
             for ext in extensions:

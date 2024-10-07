@@ -64,10 +64,10 @@ match current_extension:
         bpy.ops.wm.obj_import(filepath=current_argument)
 
     case ".ply":
-        bpy.ops.import_mesh.ply(filepath=current_argument)
+        bpy.ops.wm.ply_import(filepath=current_argument)
 
     case ".stl":
-        bpy.ops.import_mesh.stl(filepath=current_argument)
+        bpy.ops.wm.stl_import(filepath=current_argument)
 
     case ".usd" | ".usda" | ".usdc" | ".usdz":
         bpy.ops.wm.usd_import(filepath=current_argument)
