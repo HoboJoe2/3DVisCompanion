@@ -165,4 +165,13 @@ $(document).ready(function() {
             alert('Double quotes are not allowed');
         }
     });
+
+    $(document).on("paste", function(event) {
+        // Get the pasted data
+        let paste = event.originalEvent.clipboardData.getData('text');
+        if (paste.includes('"')) {
+            event.preventDefault();
+            alert('Double quotes are not allowed');
+        }
+    });
 })
