@@ -58,7 +58,7 @@ match current_extension:
         bpy.ops.wm.collada_import(filepath=current_argument)
 
     case ".fbx":
-        bpy.ops.import_scene.fbx(filepath=current_argument)
+        bpy.ops.import_scene.fbx(filepath=current_argument, use_anim=True, use_image_search=True)
 
     case ".obj":
         bpy.ops.wm.obj_import(filepath=current_argument)
@@ -79,7 +79,7 @@ model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extens
 export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
 os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
 
-bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures")
+bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures", export_draco_mesh_compression_enable=False)
 
 json_metadata = f"""
 {{
