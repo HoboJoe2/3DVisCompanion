@@ -90,5 +90,5 @@ json_metadata = f"""
 }}
 """
 
-with open(f"{export_dir}\\metadata.json", "w") as f:
+with open(f"{export_dir}\\metadata.json", "w", encoding="utf-8") as f:
     f.write(json_metadata)

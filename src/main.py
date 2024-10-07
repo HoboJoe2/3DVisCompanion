@@ -61,7 +61,7 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
                 json_object = {}
                 json_file_path = os.path.join(dirpath, filename)
                 try:
-                    with open(json_file_path, 'r') as json_file:
+                    with open(json_file_path, 'r', encoding="utf-8") as json_file:
                         json_object[json_file_path] = json.load(json_file)
                     json_dict["models"].append(json_object)
                 except json.decoder.JSONDecodeError as e:
@@ -72,7 +72,7 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
             if filename.lower().endswith(".json"):
                 json_object = {}
                 json_file_path = os.path.join(dirpath, filename)
-                with open(json_file_path, 'r') as json_file:
+                with open(json_file_path, 'r', encoding="utf-8") as json_file:
                     json_object[json_file_path] = json.load(json_file)
                 json_dict["scenes"].append(json_object)
     return json_dict
@@ -93,7 +93,7 @@ def updateAndDeleteJSONFiles(recieved_json_data):
 
                 if os.path.exists(path): # Update the json data with what is recieved from frontend
                     #json_data_string = json.dumps(json_data, indent=4) # This is to fix " character being escaped and not appearing in json conversion
-                    with open(path, 'w') as json_file:
+                    with open(path, 'w', encoding="utf-8") as json_file:
                         json.dump(json_data, json_file, indent=4)
 
     for model in generated_json_data["models"]: # Delete if path in list of files on filesystem is not in list of files recieved from frontend
