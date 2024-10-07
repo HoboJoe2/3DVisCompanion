@@ -28,7 +28,7 @@ colorama.init(autoreset=True)
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("3DVisUploader")
+        self.setWindowTitle("3DVisCompanion")
         self.setWindowIcon(QIcon(ICON_PATH))
         self.browser = QWebEngineView()
         self.browser.setPage(QWebEnginePage(self.browser))
@@ -60,9 +60,12 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
             if filename.lower().endswith(".json"):
                 json_object = {}
                 json_file_path = os.path.join(dirpath, filename)
-                with open(json_file_path, 'r') as json_file:
-                    json_object[json_file_path] = json.load(json_file)
-                json_dict["models"].append(json_object)
+                try:
+                    with open(json_file_path, 'r') as json_file:
+                        json_object[json_file_path] = json.load(json_file)
+                    json_dict["models"].append(json_object)
+                except json.decoder.JSONDecodeError as e:
+                    print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
     for dirpath, dirnames, filenames in os.walk(scenes_path):
         for filename in filenames:
@@ -108,9 +111,9 @@ def convertFile(file_path):
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
-        result = subprocess.run(["Blender 4.2\\blender.exe", "-b", "-P", "2gltf2.py", "--", file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(["Blender\\blender.exe", "-b", "-P", "2gltf2.py", "--", file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(BLUE + "--- OUTPUT FROM BLENDER CONVERSION (stdout stream) ---\n\n", result.stdout.decode())
-        print(BLUE + "--- OUTPUT BLENDER CONVERSION (stderr stream) ---\n\n", result.stderr.decode())
+        print(BLUE + "--- OUTPUT FROM BLENDER CONVERSION (stderr stream) ---\n\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
         print(RED + f"--- ERROR OCURRED DURING BLENDER CONVERSION: {e} ---\n\n")
 

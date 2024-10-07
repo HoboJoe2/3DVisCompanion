@@ -33,7 +33,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=False,
-    name='3DVisUploader',
+    name='3DVisCompanion',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

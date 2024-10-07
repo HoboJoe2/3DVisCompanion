@@ -1,7 +1,8 @@
-Blender 4.2/
+Blender/
 .vscode/
 models/
 scenes/
+test_assets/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

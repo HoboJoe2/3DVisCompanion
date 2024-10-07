@@ -1,10 +1,9 @@
-# 3DVisUploader
-Simple UI to upload, rename and delete 3D models, used with 3DVis.
-Also automatically converts models to GLTF format.
+# 3DVisCompanion
+Simple UI to upload, rename and delete 3D models, used with 3DVis. Can also rename and delete scenes.
 
 ## Build Instructions
 
-1. Install the pip modules in requirements.txt with `pip install -r requirements.txt` on Python 3.11.x. This has only been tested on 3.11.9, bpy will break on 3.12.x (I think). I recommend using a python virtual environment.
-2. Copy blender from your program files into the src folder (blender's folder name should be `Blender 4.2`).
-3. Change the `MODEL_FOLDER_PATH` variables in main.py and 2gltf2.py to your desired paths.
-4. Run `pyinstaller main.spec` from in the src folder (with the virtual environment active if you made one)
+1. Install the pip modules in requirements.txt with `pip install -r requirements.txt` on Python 3.11.x. This has only been tested on 3.11.9, bpy will break on 3.12.x (I think).
+2. Copy blender from your program files into the src folder. Blender's folder name must be `Blender`, you will have to remove the version number. This was tested using Blender 4.2.1 but should work on future versions.
+3. Change the `MODEL_FOLDER_PATH` and `SCENE_FOLDER_PATH` variables in main.py and 2gltf2.py to your desired paths.
+4. Run `python main.py`.
