@@ -1,6 +1,16 @@
 var jsonData = {
     "models": [],
     "scenes": [],
+    "options": {
+        "cameraSensitivity": 50,
+        "movementSpeed": 50,
+        "positionSpeed": 50,
+        "rotationSpeed": 50,
+        "scaleSpeed": 50,
+        "renderDistance": 5000,
+        "invertCameraControls": false,
+        "hideControls": false
+    }
 };
 
 var socket = io.connect(window.location.origin);
@@ -174,4 +184,17 @@ $(document).ready(function() {
             alert('Double quotes are not allowed');
         }
     });
+
+    $('#saveButton').on('click', function() {
+        jsonData.options.cameraSensitivity = $('#cameraSensitivity').val();
+        jsonData.options.movementSpeed = $('#movementSpeed').val();
+        jsonData.options.positionSpeed = $('#positionSpeed').val();
+        jsonData.options.rotationSpeed = $('#rotationSpeed').val();
+        jsonData.options.scaleSpeed = $('#scaleSpeed').val();
+        jsonData.options.renderDistance = $('#renderDistance').val();
+        jsonData.options.invertCameraControls = $('#invertCameraControls').is(':checked');
+        jsonData.options.hideControls = $('#hideControls').is(':checked');
+
+        socket.emit('json_transfer_to_python', jsonData);
+    }); 
 })

@@ -18,8 +18,11 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models" # "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" #"C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" 
-SCENE_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\scenes" # "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\scenes"
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"
+MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "models")
+SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "scenes")
+OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "options")
+OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "options.txt")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
@@ -49,11 +52,22 @@ class MainWindow(QMainWindow):
         return
 
 # Function definitions
-def getJSONFilesFromDirectories(models_path, scenes_path):
+def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     json_dict = {
         "models": [],
-        "scenes": []
+        "scenes": [],
+        "options": {
+            "cameraSensitivity": 50,
+            "movementSpeed": 50,
+            "positionSpeed": 50,
+            "rotationSpeed": 50,
+            "scaleSpeed": 50,
+            "renderDistance": 5000,
+            "invertCameraControls": False,
+            "hideControls": False
+        }
     }
+
 
     for dirpath, dirnames, filenames in os.walk(models_path):
         for filename in filenames:
@@ -72,18 +86,30 @@ def getJSONFilesFromDirectories(models_path, scenes_path):
             if filename.lower().endswith(".json"):
                 json_object = {}
                 json_file_path = os.path.join(dirpath, filename)
-                with open(json_file_path, 'r', encoding="utf-8") as json_file:
-                    json_object[json_file_path] = json.load(json_file)
-                json_dict["scenes"].append(json_object)
+                try:
+                    with open(json_file_path, 'r', encoding="utf-8") as json_file:
+                        json_object[json_file_path] = json.load(json_file)
+                    json_dict["scenes"].append(json_object)
+                except json.decoder.JSONDecodeError as e:
+                    print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
+
+    try:
+        with open(options_path, "r", encoding="utf-8") as f:
+            options = json.load(f)
+            json_dict["options"] = options
+    except json.decoder.JSONDecodeError as e:
+        print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
+
     return json_dict
 
 
 def updateAndDeleteJSONFiles(recieved_json_data):
-    generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH) # Generated from files on filesystem
+    generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH) # Generated from files on filesystem
     generated_json_paths = []
     recieved_json_paths = []
+    object_types_to_check = ["models", "scenes"]
 
-    for object_type in generated_json_data.keys(): # Will be 'models' and 'scenes'
+    for object_type in object_types_to_check: # Will be 'models' and 'scenes'
         for generated_json_item in generated_json_data[object_type]:
             for path in generated_json_item.keys():
                 generated_json_paths.append(path)
@@ -104,6 +130,9 @@ def updateAndDeleteJSONFiles(recieved_json_data):
         for path in scene.keys():
             if path not in recieved_json_paths:
                 send2trash.send2trash(path)
+
+    with open(OPTIONS_FILE_PATH, "w", encoding="utf-8") as f:
+        json.dump(recieved_json_data["options"], f, indent=4)
     return
 
 def convertFile(file_path):
@@ -144,7 +173,7 @@ socketio = flask_socketio.SocketIO(app, async_mode='threading')
 
 @socketio.on('connect')
 def handle_socket_connect():
-    json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH)
+    json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH)
     socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table on connection
     return
 
@@ -177,6 +206,20 @@ if __name__ == '__main__':
     # Create directories if they don't exist
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
+    os.makedirs(OPTIONS_FOLDER_PATH, exist_ok=True)
+    if not os.path.exists(OPTIONS_FILE_PATH):
+        data = {
+            "cameraSensitivity": 50,
+            "movementSpeed": 50,
+            "positionSpeed": 50,
+            "rotationSpeed": 50,
+            "scaleSpeed": 50,
+            "renderDistance": 5000,
+            "invertCameraControls": False,
+            "hideControls": False
+        }
+        with open(OPTIONS_FILE_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
 
     # Configure logging
     log = logging.getLogger('werkzeug') # Werkzeug logger is used by flask

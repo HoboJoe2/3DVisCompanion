@@ -2,6 +2,7 @@ Blender/
 .vscode/
 models/
 scenes/
+options.json
 #test_assets/
 
 # Byte-compiled / optimized / DLL files
