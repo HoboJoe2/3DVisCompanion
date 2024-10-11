@@ -150,15 +150,6 @@ $(document).on('input', '.filter', function() {
 })
 
 $(document).ready(function() {
-    $("#rotate").on({
-        mouseenter() {
-            $(this).addClass("logo");
-        },
-        animationend() {
-            $(this).removeClass("logo");
-        },
-    });
-
     $(document).on('keydown', function(event) {
         if (event.key === '"') {
             event.preventDefault();
