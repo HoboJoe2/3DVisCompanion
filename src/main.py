@@ -18,8 +18,8 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-MODEL_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" #"C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" # "\\CAVE-HEADNODE\data\3dvis\models" # 
-SCENE_FOLDER_PATH = "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\scenes"
+MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models" # "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\models" #"C:\\Users\\joedi\\Documents\\_ICT342\\3DVisUploader\\src\\models" 
+SCENE_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\scenes" # "C:\\Users\\joedi\\OneDrive - University of the Sunshine Coast\\_ICT342 (IT Project)\\3DVisUploader\\src\\scenes"
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 colorama.init(autoreset=True)
