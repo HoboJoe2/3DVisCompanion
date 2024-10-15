@@ -33,7 +33,7 @@
                                 <br><br>
                                 The conversion uses blender under the hood. Some models downloaded from online sources are incompatible with blender, these will also be incompatible with 3DVis.
                                 <br><br>
-                                Use the import object button to import a single 3D model.
+                                Use the import model button to import a single 3D model.
                                 <br><br>
                                 Use the import all from folder to import all 3D models in a folder. This will also search recursively through any sub-folders in the folder for 3D models.
                                 <br><br>
@@ -41,7 +41,7 @@
                             </p>
                             <div class="flex-parent jc-center">
                                 <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
-                                    <button type="submit" id="importButton">IMPORT OBJECT</button>
+                                    <button type="submit" id="importButton">IMPORT MODEL</button>
                                 </form>
             
                                 <form action="{{ url_for('import_directory') }}" method="post">
@@ -93,8 +93,8 @@
                             <div class="inner">
                                 <h1>MODELS</h1>
                                 <div id="modelsFilterInput">
-                                    <input type="text" title="No double quotes are allowed" id="modelnamefilter" class="filter" placeholder="NAME FILTER"></input><br>
-                                    <input type="text" class="filter" placeholder="CATERGORY FILTER"></input>
+                                    <input type="text" id="modelnamefilter" class="filter" placeholder="NAME FILTER"></input><br>
+                                    <input type="text" id="modelcategoryfilter" class="filter" placeholder="CATERGORY FILTER"></input>
                                 </div>
                                 <div>
                                     <table id="modelsTable">

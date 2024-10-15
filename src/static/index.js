@@ -75,12 +75,20 @@ $(document).on('click', '.update-btn', function() {
 
     const objectType = $(this).data("objecttype");
     const path = $(this).data("path");
-    const row = $(this).closest('tr');;
+    const row = $(this).closest('tr');
     const newName = row.find('.display-input').val();
     const newCategory = row.find('.category-input').val();
 
-    if (newName === "All" || newCategory === "All") {
-        $("#status").text("'All' is not allowed as a name.");
+    if (newCategory === "All") {
+        $("#status").text("Category name cannot be 'All'");
+        setTimeout(function() {
+            $("#status").text("");
+        }, 2000);
+        return;
+    }
+
+    if (newName === "") {
+        $("#status").text("Model name cannot be empty");
         setTimeout(function() {
             $("#status").text("");
         }, 2000);

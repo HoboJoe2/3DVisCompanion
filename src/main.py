@@ -18,13 +18,14 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"
-MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "models")
-SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "scenes")
-OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "options")
-OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "options.txt")
+BASE_PATH = "c:\\3DVisFolder" # "\\\\CAVE-HEADNODE\\data\\3dvis"
+MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
+SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
+OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
+OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.txt")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
+SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
 colorama.init(autoreset=True)
 
 # Class definitions
@@ -136,6 +137,11 @@ def updateAndDeleteJSONFiles(recieved_json_data):
     return
 
 def convertFile(file_path):
+    file_name, extension = os.path.splitext(file_path)
+    if (extension.lower() not in SUPPORTED_EXTENSIONS) or (file_name == ""):
+        print(RED + f"--- ERROR: {file_path} IS NOT A SUPPORTED FILE TYPE/FILE NAME ---\n\n")
+        return
+
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
@@ -150,10 +156,9 @@ def convertFile(file_path):
 
 def convertAllFilesInDir(dir_path):
     matched_files = []
-    extensions = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', 'usdz']
     for dirpath, dirnames, filenames in os.walk(dir_path):
         for filename in filenames:
-            for ext in extensions:
+            for ext in SUPPORTED_EXTENSIONS:
                 if filename.lower().endswith(ext):
                     matched_files.append(os.path.join(dirpath, filename))
                     break  # Stop checking other extensions once a match is found
