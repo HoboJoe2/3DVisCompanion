@@ -79,6 +79,14 @@ $(document).on('click', '.update-btn', function() {
     const newName = row.find('.display-input').val();
     const newCategory = row.find('.category-input').val();
 
+    if (newName === "All" || newCategory === "All") {
+        $("#status").text("'All' is not allowed as a name.");
+        setTimeout(function() {
+            $("#status").text("");
+        }, 2000);
+        return;
+    }
+
     if (objectType === "model") {
         // Update the model data
         $.each(jsonData.models, function(index, model) {
