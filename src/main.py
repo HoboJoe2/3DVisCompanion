@@ -26,7 +26,9 @@ OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.txt")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
+ERROR_FILE_PATH = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
 colorama.init(autoreset=True)
+
 
 # Class definitions
 class MainWindow(QMainWindow):
@@ -61,6 +63,7 @@ socketio = flask_socketio.SocketIO(app, async_mode='threading')
 # Function definitions
 def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     json_dict = {
+        "last_error": False,
         "models": [],
         "scenes": [],
         "options": {
@@ -107,6 +110,10 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     except json.decoder.JSONDecodeError as e:
         print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
+    if os.path.exists(ERROR_FILE_PATH):
+        json_dict["last_error"] = True
+        os.remove(ERROR_FILE_PATH)
+
     return json_dict
 
 def updateAndDeleteJSONFiles(recieved_json_data):
@@ -142,11 +149,6 @@ def updateAndDeleteJSONFiles(recieved_json_data):
     return
 
 def convertFile(file_path):
-    error_file_path = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
-
-    if os.path.exists(error_file_path):
-        os.remove(error_file_path)
-
     file_name, extension = os.path.splitext(file_path)
     if (extension.lower() not in SUPPORTED_EXTENSIONS) or (file_name == ""):
         print(RED + f"--- ERROR: {file_path} IS NOT A SUPPORTED FILE TYPE/FILE NAME ---\n\n")
@@ -162,9 +164,6 @@ def convertFile(file_path):
         print(RED + f"--- ERROR OCURRED DURING BLENDER CONVERSION: {e} ---\n\n")
 
     print(BLUE + f"--- FINISHED IMPORT OF {file_path} ---\n\n")
-
-    if os.path.exists(error_file_path):
-        socketio.send('error')
     return
 
 def convertAllFilesInDir(dir_path):
@@ -220,6 +219,9 @@ if __name__ == '__main__':
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
     os.makedirs(OPTIONS_FOLDER_PATH, exist_ok=True)
+    if os.path.exists(ERROR_FILE_PATH): 
+        os.remove(ERROR_FILE_PATH)
+
     if not os.path.exists(OPTIONS_FILE_PATH):
         data = {
             "cameraSensitivity": 50,
@@ -227,6 +229,8 @@ if __name__ == '__main__':
             "positionSpeed": 50,
             "rotationSpeed": 50,
             "scaleSpeed": 50,
+            "wandSmoothing:": 50,
+            "graphicsQuality": 5,
             "renderDistance": 5000,
             "invertCameraControls": False,
             "hideControls": False

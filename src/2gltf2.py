@@ -90,6 +90,7 @@ try:
 
     with open(f"{export_dir}\\metadata.json", "w", encoding="utf-8") as f:
         f.write(json_metadata)
+
 except Exception as e:
     with open(os.path.join(MODEL_FOLDER_PATH, "last_error.txt"), "w", encoding="utf-8") as f:
-        f.write(str(e))
+        f.write("True")
