@@ -28,9 +28,9 @@ function populateTables() {
 
     $.each(modelData, function(index, object) {
         $.each(object, function(path, metadata) {
-            var modelNameFilterValue = $('#modelnamefilter').val();
-            var modelCategoryFilterValue = $('#modelcategoryfilter').val();
-            if ((!modelNameFilterValue && !modelCategoryFilterValue) || (metadata.modelDisplayName.includes(modelNameFilterValue) && metadata.modelCategory.includes(modelCategoryFilterValue))) {
+            var modelNameFilterValue = $('#modelnamefilter').val().toLowerCase();
+            var modelCategoryFilterValue = $('#modelcategoryfilter').val().toLowerCase();
+            if ((!modelNameFilterValue && !modelCategoryFilterValue) || (metadata.modelDisplayName.toLowerCase().includes(modelNameFilterValue) && metadata.modelCategory.toLowerCase().includes(modelCategoryFilterValue))) {
                 const row = `
                 <tr>
                     <td><input type="text" value="${metadata.modelDisplayName}" class="display-input"></td>
@@ -48,9 +48,9 @@ function populateTables() {
 
     $.each(sceneData, function(index, object) {
         $.each(object, function(path, metadata) {
-            var sceneNameFilterValue = $('#scenenamefilter').val();
-            var sceneCategoryFilterValue = $('#scenecategoryfilter').val();
-            if ((!sceneNameFilterValue && !sceneCategoryFilterValue) || (metadata.sceneDisplayName.includes(sceneNameFilterValue) && metadata.sceneCategory.includes(sceneCategoryFilterValue))) {
+            var sceneNameFilterValue = $('#scenenamefilter').val().toLowerCase();
+            var sceneCategoryFilterValue = $('#scenecategoryfilter').val().toLowerCase();
+            if ((!sceneNameFilterValue && !sceneCategoryFilterValue) || (metadata.sceneDisplayName.toLowerCase().includes(sceneNameFilterValue) && metadata.sceneCategory.toLowerCase().includes(sceneCategoryFilterValue))) {
                 const row = `
                 <tr>
                     <td><input type="text" value="${metadata.sceneDisplayName}" class="display-input"></td>
@@ -155,26 +155,6 @@ $(document).on('click', '.delete-btn', function() {
     }, 2000);
 });
 
-$(document).on('click', '#importButton', function() {
-    $("#status").text("Importing model...");
-});
-
-$(document).on('click', '#importAllButton', function() {
-    $("#status").text("Importing all models...");
-});
-
-socket.on('json_transfer_to_js', function(data) {
-    jsonData = data;
-});
-
-socket.on('connect', function() {
-    populateTables();
-});
-
-$(document).on('input', '.filter', function() {
-    populateTables();
-})
-
 $(document).ready(function() {
     $(document).on('keydown', function(event) {
         if (event.key === '"') {
@@ -203,5 +183,27 @@ $(document).ready(function() {
         jsonData.options.hideControls = $('#hideControls').is(':checked');
 
         socket.emit('json_transfer_to_python', jsonData);
-    }); 
+    });
+
+    $(document).on('click', '#importButton', function() {
+        $("#status").text("Importing model...");
+    });
+    
+    $(document).on('click', '#importAllButton', function() {
+        $("#status").text("Importing all models...");
+    });
+    
+    socket.on('json_transfer_to_js', function(data) {
+        jsonData = data;
+    });
+
+    sock
+    
+    socket.on('connect', function() {
+        populateTables();
+    });
+    
+    $(document).on('input', '.filter', function() {
+        populateTables();
+    })
 })
