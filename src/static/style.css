@@ -134,7 +134,6 @@ body {
 .nice {
     filter: drop-shadow(-25px 25px var(--blue));
     border: 30px solid var(--dark);
-    max-width: 900px;
     width: 100%;
 }
 
@@ -150,13 +149,13 @@ h1 {
     position: absolute;
     padding: 4px 20px;
     font-weight: 800;
-    left: 1%;
-    top: 1%;
+    top :-118px;
+    left: -30px;
 }
 
 button {
     transition: background-color 0.3s ease-in, color 0.3s ease-in, filter 0.1s ease-in, transform 0.1s ease-in;
-    filter: drop-shadow(-10px 10px --red);
+    filter: drop-shadow(-10px 10px var(--red));
     font-family: "Nunito", sans-serif;
     background-color: var(--dark);
     border: 3px solid var(--dark);
@@ -180,7 +179,7 @@ button:hover {
 
 button:active {
     transform: translateX(-8px) translateY(8px);
-    filter: drop-shadow(-2px 2px --var(red));
+    filter: drop-shadow(-2px 2px var(--red));
 }
 
 table {
@@ -224,6 +223,56 @@ input {
     font-size: 1em;
 }
 
+.settings-container {
+    border: 5px solid var(--white);
+    padding: 20px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Change to equal width columns */
+    gap: 15px; /* Gap between label and input elements */
+}
+
+.setting-item {
+    background-color: var(--dark); /* Dark background color for each setting */
+    padding: 15px; /* Padding for spacing inside the box */
+    box-shadow: -10px 10px var(--red); /* Red drop shadow */
+    margin-bottom: 15px; /* Space between each setting box */
+}
+
+.settings-container label {
+    display: flex;
+    justify-content: flex-start; /* Align label content to the left */
+    align-items: center;
+    font-size: 1em;
+    color: var(--white);
+    text-transform: uppercase;
+}
+
+.settings-container input[type="range"], 
+.settings-container select {
+    width: 100%; /* Make inputs take the full width of their grid column */
+    padding: 5px; /* Add some padding for better appearance */
+    border: 3px solid var(--dark);
+    background-color: var(--white);
+    color: var(--dark);
+    font-weight: 800;
+}
+
+.settings-container input[type="checkbox"] {
+    margin-left: 10px; /* Added left margin for checkbox spacing */
+    align-self: center; /* Center checkbox vertically */
+}
+
+.settings-container select {
+    width: 70%; /* Adjusted width for the select input */
+    margin-left: 10px; /* Gap between label and select */
+    padding: 5px;
+    border: 3px solid var(--dark);
+    background-color: var(--white);
+    color: var(--dark);
+    font-weight: 800;
+}
+
 .delete-btn, .update-btn {
     filter: drop-shadow(-3px 3px var(--blue));
     padding: 0.5em 1em;
@@ -235,11 +284,7 @@ img {
     height: auto;
     width: 20%;
     max-width: 200px;
-    top: 72%;
-}
-
-.logo {
-    animation: spin 0.7s normal forwards;
+    top: 75%;
 }
 
 form.margin-right {
@@ -255,9 +300,9 @@ form.margin-right {
     flex-wrap: wrap;
 }
 
-@media screen and (max-height: 680px) and (max-width: 1520px) {
+@media (max-width: 1000px), (max-height: 875px), (orientation: portrait) {
     html {
-        font-size: 0.5em;
+        font-size: 0.6em;
     }
     
     .tab {
@@ -286,6 +331,16 @@ form.margin-right {
     }
 
     button {
-        filter: drop-shadow(-5px 5px --var(red));
+        filter: drop-shadow(-5px 5px var(--red));
+    }
+
+    button:active {
+        transform: translateX(-4px) translateY(4px);
+        filter: drop-shadow(-1px 1px var(--red));
+    }
+
+    h1 {
+        top: -61px;
+        left: -15px;
     }
 }

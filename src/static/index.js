@@ -212,5 +212,5 @@ $(document).ready(function() {
     
     $(document).on('input', '.filter', function() {
         populateTables();
-    })
-})
+    });
+});

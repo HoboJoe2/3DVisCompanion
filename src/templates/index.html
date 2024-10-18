@@ -29,7 +29,13 @@
                         <h1>ABOUT</h1>
                         <div class="inner">
                             <p>
-                                lmao
+                                3DVisCompanion is designed to enhance the 3DVis experience, making it easier to import and manage 3D models and scenes for use in CAVE2, while also offering customization options for 3DVis settings.
+                                <br><br>
+                                On the Import page, you can either upload a single selected model or import all models from a folder. When importing, 3DVisCompanion automatically converts the models into the .gltf format compatible with 3DVis, using Blender for the conversion process. Some models, especially those downloaded from online sources, may be incompatible with Blender and will fail to convert. The command prompt window displays the upload progress and any errors encountered during conversion.
+                                <br><br>
+                                The Model Management and Scene Management pages provide tables of all models and scenes accessible in 3DVis, allowing you to filter items by name or category. Each item includes options to rename, re-categorize, or delete it from the system.
+                                <br><br>
+                                The Options page allows you to adjust various 3DVis settings through sliders, including camera sensitivity and movement speed, along with a selection of graphical settings for performance optimization. Additional toggle options let you invert camera movement or hide UI elements for a cleaner showcase experience. Once settings are customized, you can save them, ensuring 3DVis applies the changes during use.
                             </p>
                         </div>
                     </div>
@@ -41,20 +47,10 @@
             <div class="vertical">
                 <div class="horizontal relative">
                     <div class="nice">
-                        <h1>INSTRUCTIONS</h1>
+                        <h1>IMPORT</h1>
                         <div class="inner">
                             <p>
-                                This application is used to import 3D models into the 3DVis application, as well as renaming and deleting 3DVis' models and scenes.
-                                <br><br>
-                                When importing a model, it also converts it into the correct file format for 3DVis (.gltf).
-                                <br><br>
-                                The conversion uses blender under the hood. Some models downloaded from online sources are incompatible with blender, these will also be incompatible with 3DVis.
-                                <br><br>
-                                Use the import model button to import a single 3D model.
-                                <br><br>
-                                Use the import all from folder to import all 3D models in a folder. This will also search recursively through any sub-folders in the folder for 3D models.
-                                <br><br>
-                                Check the command prompt window to see upload progress and errors.
+                                
                             </p>
                             <div class="flex-parent jc-center">
                                 <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
@@ -140,51 +136,60 @@
                         <div class="corners">
                             <div class="inner">
                                 <h1>OPTIONS</h1>
-                                <div class="settings-container">
-                                    <label for="cameraSensitivity">Camera Sensitivity: <span id="cameraSensitivityValue">0.5</span></label>
-                                    <input type="range" id="cameraSensitivity" min="0.1" max="1" step="0.01" value=0.5 oninput="$('#cameraSensitivityValue').text(this.value)">
-        
-                                    <label for="movementSpeed">Movement Speed: <span id="movementSpeedValue">0.5</span></label>
-                                    <input type="range" id="movementSpeed" min="0.1" max="1" step="0.01" value=0.5 oninput="$('#movementSpeedValue').text(this.value)">
-        
-                                    <label for="positionSpeed">Position Speed: <span id="positionSpeedValue">0.5</span></label>
-                                    <input type="range" id="positionSpeed" min="0.1" max="1" step="0.01" value=0.5 oninput="$('#positionSpeedValue').text(this.value)">
-        
-                                    <label for="rotationSpeed">Rotation Speed: <span id="rotationSpeedValue">0.5</span></label>
-                                    <input type="range" id="rotationSpeed" min="0.1" max="1" step="0.01" value=0.5 oninput="$('#rotationSpeedValue').text(this.value)">
-        
-                                    <label for="scaleSpeed">Scale Speed: <span id="scaleSpeedValue">0.5</span></label>
-                                    <input type="range" id="scaleSpeed" min="0.1" max="1" step="0.01" value=0.5 oninput="$('#scaleSpeedValue').text(this.value)">
-
-                                    <label for="wandSmoothing">Wand Smoothing: <span id="wandSmoothingValue">20</span></label>
-                                    <input type="range" id="wandSmoothing" min="5" max="100" step="0.1" value=20 oninput="$('#wandSmoothingValue').text(this.value)">
-        
-                                    <label for="renderDistance">Render Distance: <span id="renderDistanceValue">5000</span></label>
-                                    <input type="range" id="renderDistance" min="1000" max="10000" step="1" value=5000 oninput="$('#renderDistanceValue').text(this.value)">
-
-                                    <label for="graphicsQuality">Graphics Quality:</label>
-                                    <select id="graphicsQuality">
-                                        <option value="0">Very Low</option>
-                                        <option value="1">Low</option>
-                                        <option value="2">Medium</option>
-                                        <option value="3">High</option>
-                                        <option value="4">Very High</option>
-                                        <option value="5" selected>Ultra</option>
-                                    </select>
-        
-                                    <label>
-                                        <input type="checkbox" id="invertCameraControls">
-                                        Invert Camera Controls
-                                    </label>
-        
-                                    <label>
-                                        <input type="checkbox" id="hideControls">
-                                        Hide Controls
-                                    </label>
-                                    <br><br>
-                                    <button id="saveButton">Save Settings</button>
-                                </div>
-                                </table>
+                                    <div class="settings-container">
+                                        <div class="setting-item">
+                                            <label for="cameraSensitivity">Camera Sensitivity: <span id="cameraSensitivityValue">0.5</span></label>
+                                            <input type="range" id="cameraSensitivity" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#cameraSensitivityValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="movementSpeed">Movement Speed: <span id="movementSpeedValue">0.5</span></label>
+                                            <input type="range" id="movementSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#movementSpeedValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="positionSpeed">Position Speed: <span id="positionSpeedValue">0.5</span></label>
+                                            <input type="range" id="positionSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#positionSpeedValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="rotationSpeed">Rotation Speed: <span id="rotationSpeedValue">0.5</span></label>
+                                            <input type="range" id="rotationSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#rotationSpeedValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="scaleSpeed">Scale Speed: <span id="scaleSpeedValue">0.5</span></label>
+                                            <input type="range" id="scaleSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#scaleSpeedValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="wandSmoothing">Wand Smoothing: <span id="wandSmoothingValue">20</span></label>
+                                            <input type="range" id="wandSmoothing" min="5" max="100" step="0.1" value="20" oninput="$('#wandSmoothingValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="renderDistance">Render Distance: <span id="renderDistanceValue">5000</span></label>
+                                            <input type="range" id="renderDistance" min="1000" max="10000" step="1" value="5000" oninput="$('#renderDistanceValue').text(this.value)">
+                                        </div>
+                                        <div class="setting-item">
+                                            <label for="graphicsQuality">Graphics Quality:</label>
+                                            <select id="graphicsQuality">
+                                                <option value="0">Very Low</option>
+                                                <option value="1">Low</option>
+                                                <option value="2">Medium</option>
+                                                <option value="3">High</option>
+                                                <option value="4">Very High</option>
+                                                <option value="5" selected>Ultra</option>
+                                            </select>
+                                        </div>
+                                        <div class="setting-item">
+                                            <label>
+                                                <input type="checkbox" id="invertCameraControls">
+                                                Invert Camera Controls
+                                            </label>
+                                        </div>
+                                        <div class="setting-item">
+                                            <label>
+                                                <input type="checkbox" id="hideControls">
+                                                Hide Controls
+                                            </label>
+                                        </div>
+                                        <button id="saveButton">SAVE SETTINGS</button>
+                                    </div>
                             </div>
                         </div>
                     </div>
