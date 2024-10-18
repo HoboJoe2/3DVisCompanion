@@ -1,30 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&display=swap');
+
+:root {
+    --dark: #0F1111;
+    --white: #FFF;
+    --red: #E5373A;
+    --blue: #3758A4;
+}
 
 @keyframes bg-scrolling {
-    0% {
-        background-position: 0px 0px;
-    }
-    100% {
-        background-position: -1920px -1080px;
-    }
+    0% { background-position: 0px 0px; }
+    100% { background-position: -1920px -1080px; }
 }
 
 html {
-    overscroll-behavior-block: contain;
     font-family: "Nunito", sans-serif;
-    font-optical-sizing: auto;
     overscroll-behavior: none;
-    -ms-overflow-style: none;
     scrollbar-width: none;
-    font-style: normal;
+    color: var(--dark);
     font-size: 1.25em;
     font-weight: 700;
-    color: #0F1111;
 }
 
 html::-webkit-scrollbar {
     display: none;
-    width: 0;
 }
 
 body {
@@ -36,7 +34,6 @@ body {
     animation: bg-scrolling 60s linear infinite;
     background-image: url('Grid.png');
     background-size: 900px;
-    display: block;
     height: 100vh;
     width: 100vw;
 }
@@ -49,44 +46,56 @@ body {
     display: block;
 }
 
+.tab {
+    transition: transform 0.05s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    filter: drop-shadow(0px 0px 5px var(--dark));
+    box-shadow: inset 0 0 0 4px var(--dark);
+    background-color: var(--white);
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 20px;
+    align-items: center;
+    padding: 0.5em 1em;
+    text-align: center;
+    margin: 0 10px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+}
+
 .tabs {
-    border-bottom: 1px solid black;
     justify-content: space-around;
     list-style-type: none;
-    background: white;
+    text-align: center;
+    font-size: 1.25em;
+    padding: 0.5em 0;
     position: fixed;
-    font-size: 2em;
     display: flex;
     width: 100%;
-    padding: 0;
+    z-index: 10;
     margin: 0;
 }
 
-.tab{
-    transition: background-color 0.3s ease-in, color 0.3s ease-in;
-    text-align: center;
-    cursor: pointer;
-    width: 34%;
+.tab:hover {
+    background-color: var(--red);
+    transform: translateY(-7px);
+    color: var(--white);
 }
 
-.tab.active{
-    background-color: #878888;
-    color: #FFF;  
-}
-
-.tab:hover{
-    background-color: #0F1111;
-    color: #FFF;
+.tab.active {
+    background-color: var(--blue);
+    color: var(--white);
 }
 
 #status:not(:empty) {
-    background-color: #0F1111;
+    background-color: var(--dark);
+    color: var(--white);
     position: fixed;
     font-size: 2em;
-    color: #FFF;
     padding: 20px;
-    margin: auto;
-    left: 36.2%;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1;
     top: 40%;
 }
@@ -108,10 +117,10 @@ body {
 }
 
 .inner {
-    box-shadow: 0px 0px 0px 20px #0F1111;
+    box-shadow: 0px 0px 0px 20px var(--dark);
     align-content: center;
     border-radius: 10px;
-    background: #FFF;
+    background: var(--white);
     overflow: auto;
     height: 60vh;
     padding: 1em;
@@ -123,33 +132,34 @@ body {
 }
 
 .nice {
-    filter: drop-shadow(-25px 25px #3758A4);
-    border: 30px solid #0F1111;
-    width: 900px;
+    filter: drop-shadow(-25px 25px var(--blue));
+    border: 30px solid var(--dark);
+    max-width: 900px;
+    width: 100%;
 }
 
 .corners {
+    background: var(--white);
     border-radius: 10px;
-    background: #FFF;
 }
 
 h1 {
+    background: var(--dark);
     display: inline-block;
-    background: #0F1111;
+    color: var(--white);
     position: absolute;
     padding: 4px 20px;
     font-weight: 800;
-    left: -0.75em;
-    top: -2.97em;
-    color: #FFF;
+    left: 1%;
+    top: 1%;
 }
 
 button {
     transition: background-color 0.3s ease-in, color 0.3s ease-in, filter 0.1s ease-in, transform 0.1s ease-in;
-    filter: drop-shadow(-10px 10px #E5373A);
+    filter: drop-shadow(-10px 10px --red);
     font-family: "Nunito", sans-serif;
-    background-color: #0F1111;
-    border: 3px solid #0F1111;
+    background-color: var(--dark);
+    border: 3px solid var(--dark);
     font-optical-sizing: auto;
     text-decoration: none;
     display: inline-block;
@@ -160,21 +170,21 @@ button {
     margin: 4px 2px;
     cursor: pointer;
     font-size: 1em;
-    color: #FFF;
+    color: var(--white);
 }
 
 button:hover {
-    background-color: #FFF;
-    color: #0F1111;
+    background-color: var(--white);
+    color: var(--dark);
 }
 
 button:active {
     transform: translateX(-8px) translateY(8px);
-    filter: drop-shadow(-2px 2px #E5373A);
+    filter: drop-shadow(-2px 2px --var(red));
 }
 
 table {
-    filter: drop-shadow(-10px 10px #E5373A);
+    filter: drop-shadow(-5px 5px var(--red));
     border-collapse: collapse;
     margin-bottom: 1.5em;
     text-align: left;
@@ -183,24 +193,24 @@ table {
 }
 
 th, td {
-    border: 2px solid #0F1111;
+    border: 2px solid var(--dark);
     padding: 12px 15px;
 }
 
 th {
-    background-color: #0F1111;
+    background-color: var(--dark);
     text-transform: uppercase;
+    color: var(--white);
     font-weight: 800;
-    color: #FFF;
 }
 
 td {
-    background-color: #FFF;
-    color: #0F1111;
+    background-color: var(--white);
+    color: var(--dark);
 }
 
 .filter {
-    border: 2px solid #0F1111;
+    border: 2px solid var(--dark);
     width: calc(100% - 20px);
     margin-bottom: 1em;
     border-radius: 5px;
@@ -210,34 +220,30 @@ td {
 input {
     font-family: "Nunito", sans-serif;
     font-weight: 700;
-    color: #0F1111;
+    color: var(--dark);
     font-size: 1em;
 }
 
 .delete-btn, .update-btn {
-    filter: drop-shadow(-5px 5px #3758A4);
+    filter: drop-shadow(-3px 3px var(--blue));
     padding: 0.5em 1em;
 }
 
-.delete-btn:active, .update-btn:active {
-    transform: translateX(-3px) translateY(3px);
-    filter: drop-shadow(-2px 2px #3758A4);
-}
-
 img {
-    filter: drop-shadow(0px 0px 5px #0F1111);
+    filter: drop-shadow(0px 0px 5px var(--dark));
     position: absolute;
-    height: 200px;
-    width: 200px;
+    height: auto;
+    width: 20%;
+    max-width: 200px;
     top: 72%;
 }
 
 .logo {
-    animation: spin 0.7s 0s 1 normal forwards;
+    animation: spin 0.7s normal forwards;
 }
 
 form.margin-right {
-    margin-right: 200px;
+    margin-right: 5%;
 }
 
 .jc-center {
@@ -246,4 +252,40 @@ form.margin-right {
 
 .flex-parent {
     display: flex;
+    flex-wrap: wrap;
+}
+
+@media screen and (max-height: 680px) and (max-width: 1520px) {
+    html {
+        font-size: 0.5em;
+    }
+    
+    .tab {
+        width: 80%;
+        margin: 5px 0;
+    }
+
+    #status {
+        font-size: 1.5em;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px;
+    }
+
+    img {
+        display: none;
+    }
+
+    .inner {
+        box-shadow: 0px 0px 0px 10px var(--dark);
+    }
+
+    .nice {
+        filter: drop-shadow(-12px 12px var(--blue));
+        border: 15px solid var(--dark);
+    }
+
+    button {
+        filter: drop-shadow(-5px 5px --var(red));
+    }
 }
