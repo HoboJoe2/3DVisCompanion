@@ -11,16 +11,33 @@
 </head>
 <body>
     <ul class="tabs">
-        <li data-tab-target="#import" class="active tab">Import</li>
+        <li data-tab-target="#about" class="active tab">About</li>
+        <li data-tab-target="#import" class="tab">Import</li>
         <li data-tab-target="#model_management" class="tab">Model Management</li>
         <li data-tab-target="#scene_management" class="tab">Scene Management</li>
+        <li data-tab-target="#options" class="tab">Options</li>
     </ul>
     <div class="bg"></div>
     <img src="{{ url_for('static',filename='3DVis-transparent.png') }}">
     <p id="status"></p>
     <div class="tab-contents">
 
-        <div id="import" data-tab-content class="active">
+        <div id="about" data-tab-content class="active">
+            <div class="vertical">
+                <div class="horizontal relative">
+                    <div class="nice">
+                        <h1>ABOUT</h1>
+                        <div class="inner">
+                            <p>
+                                lmao
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="import" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
                     <div class="nice">
@@ -48,37 +65,6 @@
                                     <button type="submit" id="importAllButton">IMPORT ALL FROM FOLDER</button>
                                 </form>
                             </div>
-                        </div>
-                        <div class="settings-container">
-                            <label for="cameraSensitivity">Camera Sensitivity: <span id="cameraSensitivityValue">0.5</span></label>
-                            <input type="range" id="cameraSensitivity" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#cameraSensitivityValue').text(this.value)">
-
-                            <label for="movementSpeed">Movement Speed: <span id="movementSpeedValue">0.5</span></label>
-                            <input type="range" id="movementSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#movementSpeedValue').text(this.value)">
-
-                            <label for="positionSpeed">Position Speed: <span id="positionSpeedValue">0.5</span></label>
-                            <input type="range" id="positionSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#positionSpeedValue').text(this.value)">
-
-                            <label for="rotationSpeed">Rotation Speed: <span id="rotationSpeedValue">0.5</span></label>
-                            <input type="range" id="rotationSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#rotationSpeedValue').text(this.value)">
-
-                            <label for="scaleSpeed">Scale Speed: <span id="scaleSpeedValue">0.5</span></label>
-                            <input type="range" id="scaleSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#scaleSpeedValue').text(this.value)">
-
-                            <label for="renderDistance">Render Distance: <span id="renderDistanceValue">5000</span></label>
-                            <input type="range" id="renderDistance" min="1000" max="10000" step="1" value="5000" oninput="$('#renderDistanceValue').text(this.value)">
-
-                            <label>
-                                <input type="checkbox" id="invertCameraControls">
-                                Invert Camera Controls
-                            </label>
-
-                            <label>
-                                <input type="checkbox" id="hideControls">
-                                Hide Controls
-                            </label>
-
-                            <button id="saveButton">Save Settings</button>
                         </div>
                     </div>
                 </div>
@@ -139,6 +125,52 @@
                                     <tbody>
                                         <!-- Rows will be populated here -->
                                     </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="options" data-tab-content>
+            <div class="vertical">
+                <div class="horizontal relative">
+                    <div class="nice">
+                        <div class="corners">
+                            <div class="inner">
+                                <h1>OPTIONS</h1>
+                                <div class="settings-container">
+                                    <label for="cameraSensitivity">Camera Sensitivity: <span id="cameraSensitivityValue">0.5</span></label>
+                                    <input type="range" id="cameraSensitivity" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#cameraSensitivityValue').text(this.value)">
+        
+                                    <label for="movementSpeed">Movement Speed: <span id="movementSpeedValue">0.5</span></label>
+                                    <input type="range" id="movementSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#movementSpeedValue').text(this.value)">
+        
+                                    <label for="positionSpeed">Position Speed: <span id="positionSpeedValue">0.5</span></label>
+                                    <input type="range" id="positionSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#positionSpeedValue').text(this.value)">
+        
+                                    <label for="rotationSpeed">Rotation Speed: <span id="rotationSpeedValue">0.5</span></label>
+                                    <input type="range" id="rotationSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#rotationSpeedValue').text(this.value)">
+        
+                                    <label for="scaleSpeed">Scale Speed: <span id="scaleSpeedValue">0.5</span></label>
+                                    <input type="range" id="scaleSpeed" min="0.1" max="1" step="0.01" value="0.5" oninput="$('#scaleSpeedValue').text(this.value)">
+        
+                                    <label for="renderDistance">Render Distance: <span id="renderDistanceValue">5000</span></label>
+                                    <input type="range" id="renderDistance" min="1000" max="10000" step="1" value="5000" oninput="$('#renderDistanceValue').text(this.value)">
+        
+                                    <label>
+                                        <input type="checkbox" id="invertCameraControls">
+                                        Invert Camera Controls
+                                    </label>
+        
+                                    <label>
+                                        <input type="checkbox" id="hideControls">
+                                        Hide Controls
+                                    </label>
+        
+                                    <button id="saveButton">Save Settings</button>
+                                </div>
                                 </table>
                             </div>
                         </div>
