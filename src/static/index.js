@@ -1,4 +1,5 @@
 var jsonData = {
+    "last_error": false,
     "models": [],
     "scenes": [],
     "options": {
@@ -7,16 +8,22 @@ var jsonData = {
         "positionSpeed": 50,
         "rotationSpeed": 50,
         "scaleSpeed": 50,
+        "wandSmoothing": 50,
+        "graphicsQuality": 5,
         "renderDistance": 5000,
         "invertCameraControls": false,
         "hideControls": false
     }
 };
 
-var socket = io.connect(window.location.origin);
+var socket = io();// io.connect(window.location.origin);
 
 // Update the tables data
 function populateTables() {
+    if (jsonData["last_error"]) {
+        alert("Failed import of one or more models! See command prompt window for details");
+    }
+
     const $modelsTableBody = $("#modelsTable tbody");
     const $scenesTableBody = $("#scenesTable tbody");
 
@@ -178,9 +185,11 @@ $(document).ready(function() {
         jsonData.options.positionSpeed = $('#positionSpeed').val();
         jsonData.options.rotationSpeed = $('#rotationSpeed').val();
         jsonData.options.scaleSpeed = $('#scaleSpeed').val();
+        jsonData.options.wandSmoothing = $('#wandSmoothing').val();
         jsonData.options.renderDistance = $('#renderDistance').val();
         jsonData.options.invertCameraControls = $('#invertCameraControls').is(':checked');
         jsonData.options.hideControls = $('#hideControls').is(':checked');
+        jsonData.options.graphicsQuality = $('#graphicsQuality').val();
 
         socket.emit('json_transfer_to_python', jsonData);
     });
@@ -192,7 +201,7 @@ $(document).ready(function() {
     $(document).on('click', '#importAllButton', function() {
         $("#status").text("Importing all models...");
     });
-    
+
     socket.on('json_transfer_to_js', function(data) {
         jsonData = data;
     });

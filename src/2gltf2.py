@@ -28,7 +28,7 @@ import sys
 import datetime
 
 # Global variables
-MODEL_FOLDER_PATH = "c:\\3DVisFolder\\models" # "\\\\CAVE-HEADNODE\\data\\3dvis\\models"
+MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models"#"c:\\3DVisFolder\\models"
 
 
 # Function definitions
@@ -37,55 +37,60 @@ def generateUniqueFolderName(model_name):
 
 
 # Main program
-current_argument = sys.argv[-1]
+try:
+    current_argument = sys.argv[-1]
 
-root, current_extension = os.path.splitext(current_argument)
-current_basename = os.path.basename(root)
+    root, current_extension = os.path.splitext(current_argument)
+    current_basename = os.path.basename(root)
 
-bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.wm.read_factory_settings(use_empty=True)
 
-match current_extension:
-    case ".gltf" | ".glb":
-        bpy.ops.import_scene.gltf(filepath=current_argument)
+    match current_extension:
+        case ".gltf" | ".glb":
+            bpy.ops.import_scene.gltf(filepath=current_argument)
 
-    case ".abc":
-        bpy.ops.wm.alembic_import(filepath=current_argument)
+        case ".abc":
+            bpy.ops.wm.alembic_import(filepath=current_argument)
 
-    case ".blend":
-        bpy.ops.wm.open_mainfile(filepath=current_argument)
+        case ".blend":
+            bpy.ops.wm.open_mainfile(filepath=current_argument)
 
-    case ".dae":
-        bpy.ops.wm.collada_import(filepath=current_argument)
+        case ".dae":
+            bpy.ops.wm.collada_import(filepath=current_argument)
 
-    case ".fbx":
-        bpy.ops.import_scene.fbx(filepath=current_argument, use_anim=True, use_image_search=True)
+        case ".fbx":
+            bpy.ops.import_scene.fbx(filepath=current_argument, use_anim=True, use_image_search=True)
 
-    case ".obj":
-        bpy.ops.wm.obj_import(filepath=current_argument)
+        case ".obj":
+            bpy.ops.wm.obj_import(filepath=current_argument)
 
-    case ".ply":
-        bpy.ops.wm.ply_import(filepath=current_argument)
+        case ".ply":
+            bpy.ops.wm.ply_import(filepath=current_argument)
 
-    case ".stl":
-        bpy.ops.wm.stl_import(filepath=current_argument)
+        case ".stl":
+            bpy.ops.wm.stl_import(filepath=current_argument)
 
-    case ".usd" | ".usda" | ".usdc" | ".usdz":
-        bpy.ops.wm.usd_import(filepath=current_argument)
+        case ".usd" | ".usda" | ".usdc" | ".usdz":
+            bpy.ops.wm.usd_import(filepath=current_argument)
 
-model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}")
-export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
-os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
+    model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}")
+    export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
+    os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
 
-bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures", export_draco_mesh_compression_enable=False)
+    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures", export_draco_mesh_compression_enable=False)
 
-json_metadata = f"""
-{{
-    "originalModelName": "{current_basename}",
-    "originalExtension": "{current_extension}",
-    "modelDisplayName": "{current_basename}",
-    "modelCategory": ""
-}}
-"""
+    json_metadata = f"""
+    {{
+        "originalModelName": "{current_basename}",
+        "originalExtension": "{current_extension}",
+        "modelDisplayName": "{current_basename}",
+        "modelCategory": ""
+    }}
+    """
 
-with open(f"{export_dir}\\metadata.json", "w", encoding="utf-8") as f:
-    f.write(json_metadata)
+    with open(f"{export_dir}\\metadata.json", "w", encoding="utf-8") as f:
+        f.write(json_metadata)
+
+except Exception as e:
+    with open(os.path.join(MODEL_FOLDER_PATH, "last_error.txt"), "w", encoding="utf-8") as f:
+        f.write("True")

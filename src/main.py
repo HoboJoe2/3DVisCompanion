@@ -18,15 +18,17 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "c:\\3DVisFolder" # "\\\\CAVE-HEADNODE\\data\\3dvis"
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"# "c:\\3DVisFolder" 
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
-OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.txt")
+OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.json")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
+ERROR_FILE_PATH = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
 colorama.init(autoreset=True)
+
 
 # Class definitions
 class MainWindow(QMainWindow):
@@ -52,23 +54,20 @@ class MainWindow(QMainWindow):
             """)
         return
 
+
+# These 2 lines have to be outside the main logic for the function decorators
+app = flask.Flask(__name__)
+socketio = flask_socketio.SocketIO(app, async_mode='threading')
+
+
 # Function definitions
 def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     json_dict = {
+        "last_error": False,
         "models": [],
         "scenes": [],
-        "options": {
-            "cameraSensitivity": 50,
-            "movementSpeed": 50,
-            "positionSpeed": 50,
-            "rotationSpeed": 50,
-            "scaleSpeed": 50,
-            "renderDistance": 5000,
-            "invertCameraControls": False,
-            "hideControls": False
-        }
+        "options": {}
     }
-
 
     for dirpath, dirnames, filenames in os.walk(models_path):
         for filename in filenames:
@@ -101,8 +100,11 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     except json.decoder.JSONDecodeError as e:
         print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
-    return json_dict
+    if os.path.exists(ERROR_FILE_PATH):
+        json_dict["last_error"] = True
+        os.remove(ERROR_FILE_PATH)
 
+    return json_dict
 
 def updateAndDeleteJSONFiles(recieved_json_data):
     generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH) # Generated from files on filesystem
@@ -171,11 +173,6 @@ def run_flask_app():
     socketio.run(app, port=5000)
     return
 
-
-# These 2 lines have to be outside the main logic for the function decorators
-app = flask.Flask(__name__)
-socketio = flask_socketio.SocketIO(app, async_mode='threading')
-
 @socketio.on('connect')
 def handle_socket_connect():
     json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH)
@@ -212,13 +209,18 @@ if __name__ == '__main__':
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
     os.makedirs(OPTIONS_FOLDER_PATH, exist_ok=True)
+    if os.path.exists(ERROR_FILE_PATH): 
+        os.remove(ERROR_FILE_PATH)
+
     if not os.path.exists(OPTIONS_FILE_PATH):
         data = {
-            "cameraSensitivity": 50,
-            "movementSpeed": 50,
-            "positionSpeed": 50,
-            "rotationSpeed": 50,
-            "scaleSpeed": 50,
+            "cameraSensitivity": 0.5,
+            "movementSpeed": 0.5,
+            "positionSpeed": 0.5,
+            "rotationSpeed": 0.5,
+            "scaleSpeed": 0.5,
+            "wandSmoothing": 20,
+            "graphicsQuality": 5,
             "renderDistance": 5000,
             "invertCameraControls": False,
             "hideControls": False
