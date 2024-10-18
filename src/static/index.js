@@ -196,8 +196,6 @@ $(document).ready(function() {
     socket.on('json_transfer_to_js', function(data) {
         jsonData = data;
     });
-
-    sock
     
     socket.on('connect', function() {
         populateTables();
