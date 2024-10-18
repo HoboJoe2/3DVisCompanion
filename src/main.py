@@ -214,12 +214,12 @@ if __name__ == '__main__':
 
     if not os.path.exists(OPTIONS_FILE_PATH):
         data = {
-            "cameraSensitivity": 50,
-            "movementSpeed": 50,
-            "positionSpeed": 50,
-            "rotationSpeed": 50,
-            "scaleSpeed": 50,
-            "wandSmoothing": 50,
+            "cameraSensitivity": 0.5,
+            "movementSpeed": 0.5,
+            "positionSpeed": 0.5,
+            "rotationSpeed": 0.5,
+            "scaleSpeed": 0.5,
+            "wandSmoothing": 20,
             "graphicsQuality": 5,
             "renderDistance": 5000,
             "invertCameraControls": False,
