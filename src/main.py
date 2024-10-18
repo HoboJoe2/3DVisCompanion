@@ -18,11 +18,11 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "c:\\3DVisFolder" # "\\\\CAVE-HEADNODE\\data\\3dvis"
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"# "c:\\3DVisFolder" 
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
-OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.txt")
+OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.json")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
@@ -66,18 +66,8 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
         "last_error": False,
         "models": [],
         "scenes": [],
-        "options": {
-            "cameraSensitivity": 50,
-            "movementSpeed": 50,
-            "positionSpeed": 50,
-            "rotationSpeed": 50,
-            "scaleSpeed": 50,
-            "renderDistance": 5000,
-            "invertCameraControls": False,
-            "hideControls": False
-        }
+        "options": {}
     }
-
 
     for dirpath, dirnames, filenames in os.walk(models_path):
         for filename in filenames:
@@ -229,7 +219,7 @@ if __name__ == '__main__':
             "positionSpeed": 50,
             "rotationSpeed": 50,
             "scaleSpeed": 50,
-            "wandSmoothing:": 50,
+            "wandSmoothing": 50,
             "graphicsQuality": 5,
             "renderDistance": 5000,
             "invertCameraControls": False,

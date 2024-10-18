@@ -8,7 +8,7 @@ var jsonData = {
         "positionSpeed": 50,
         "rotationSpeed": 50,
         "scaleSpeed": 50,
-        "wandSmoothing:": 50,
+        "wandSmoothing": 50,
         "graphicsQuality": 5,
         "renderDistance": 5000,
         "invertCameraControls": false,
@@ -190,15 +190,8 @@ $(document).ready(function() {
         jsonData.options.invertCameraControls = $('#invertCameraControls').is(':checked');
         jsonData.options.hideControls = $('#hideControls').is(':checked');
         jsonData.options.graphicsQuality = $('#graphicsQuality').val();
-        jsonData.options.graphicsQualityText = $('#graphicsQuality option:selected').text();
 
         socket.emit('json_transfer_to_python', jsonData);
-    });
-
-    $('#graphicsQualityValue').text($('#graphicsQuality option:selected').text());
-    // Update graphics quality display on change
-    $('#graphicsQuality').change(function() {
-        $('#graphicsQualityValue').text($(this).find("option:selected").text());
     });
 
     $(document).on('click', '#importButton', function() {
