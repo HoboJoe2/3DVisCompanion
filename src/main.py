@@ -52,6 +52,12 @@ class MainWindow(QMainWindow):
             """)
         return
 
+
+# These 2 lines have to be outside the main logic for the function decorators
+app = flask.Flask(__name__)
+socketio = flask_socketio.SocketIO(app, async_mode='threading')
+
+
 # Function definitions
 def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
     json_dict = {
@@ -103,7 +109,6 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
 
     return json_dict
 
-
 def updateAndDeleteJSONFiles(recieved_json_data):
     generated_json_data = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH) # Generated from files on filesystem
     generated_json_paths = []
@@ -137,6 +142,11 @@ def updateAndDeleteJSONFiles(recieved_json_data):
     return
 
 def convertFile(file_path):
+    error_file_path = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
+
+    if os.path.exists(error_file_path):
+        os.remove(error_file_path)
+
     file_name, extension = os.path.splitext(file_path)
     if (extension.lower() not in SUPPORTED_EXTENSIONS) or (file_name == ""):
         print(RED + f"--- ERROR: {file_path} IS NOT A SUPPORTED FILE TYPE/FILE NAME ---\n\n")
@@ -152,6 +162,9 @@ def convertFile(file_path):
         print(RED + f"--- ERROR OCURRED DURING BLENDER CONVERSION: {e} ---\n\n")
 
     print(BLUE + f"--- FINISHED IMPORT OF {file_path} ---\n\n")
+
+    if os.path.exists(error_file_path):
+        socketio.send('error')
     return
 
 def convertAllFilesInDir(dir_path):
@@ -170,11 +183,6 @@ def convertAllFilesInDir(dir_path):
 def run_flask_app():
     socketio.run(app, port=5000)
     return
-
-
-# These 2 lines have to be outside the main logic for the function decorators
-app = flask.Flask(__name__)
-socketio = flask_socketio.SocketIO(app, async_mode='threading')
 
 @socketio.on('connect')
 def handle_socket_connect():

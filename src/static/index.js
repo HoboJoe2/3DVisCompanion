@@ -192,6 +192,10 @@ $(document).ready(function() {
     $(document).on('click', '#importAllButton', function() {
         $("#status").text("Importing all models...");
     });
+
+    socket.on('error', function() {
+        alert("error")
+    });
     
     socket.on('json_transfer_to_js', function(data) {
         jsonData = data;
