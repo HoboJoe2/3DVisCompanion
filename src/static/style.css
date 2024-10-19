@@ -228,49 +228,124 @@ input {
     padding: 20px;
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Change to equal width columns */
-    gap: 15px; /* Gap between label and input elements */
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
 .setting-item {
-    background-color: var(--dark); /* Dark background color for each setting */
-    padding: 15px; /* Padding for spacing inside the box */
-    box-shadow: -10px 10px var(--red); /* Red drop shadow */
-    margin-bottom: 15px; /* Space between each setting box */
+    background-color: var(--dark);
+    padding: 15px;
+    box-shadow: -10px 10px var(--red);
+    margin-bottom: 15px;
 }
 
 .settings-container label {
     display: flex;
-    justify-content: flex-start; /* Align label content to the left */
+    justify-content: flex-start;
     align-items: center;
     font-size: 1em;
     color: var(--white);
     text-transform: uppercase;
 }
 
+.range {
+    padding-bottom: 10px;
+}
+
 .settings-container input[type="range"], 
 .settings-container select {
-    width: 100%; /* Make inputs take the full width of their grid column */
-    padding: 5px; /* Add some padding for better appearance */
-    border: 3px solid var(--dark);
-    background-color: var(--white);
-    color: var(--dark);
-    font-weight: 800;
-}
-
-.settings-container input[type="checkbox"] {
-    margin-left: 10px; /* Added left margin for checkbox spacing */
-    align-self: center; /* Center checkbox vertically */
-}
-
-.settings-container select {
-    width: 70%; /* Adjusted width for the select input */
-    margin-left: 10px; /* Gap between label and select */
+    width: 98%;
     padding: 5px;
     border: 3px solid var(--dark);
     background-color: var(--white);
     color: var(--dark);
     font-weight: 800;
+    border-radius: 10px;
+    appearance: none;
+}
+
+.settings-container input[type="range"] {
+    height: 12px;
+    background-color: var(--white);
+    border: 2px solid var(--dark);
+    box-shadow: 0px 0px 5px var(--dark);
+}
+
+.settings-container input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background-color: var(--dark);
+    border: 3px solid var(--blue);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.settings-container input[type="range"]::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background-color: var(--dark);
+    border: 3px solid var(--blue);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.settings-container input[type="checkbox"] {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    align-self: center;
+    background-color: var(--white);
+    border: 3px solid var(--dark);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.settings-container input[type="checkbox"]:checked {
+    background-color: var(--dark);
+    border-color: blue;
+}
+
+.settings-container input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: var(--white);
+    font-weight: bold;
+}
+
+.settings-container input[type="checkbox"] {
+    box-shadow: 0px 0px 5px var(--dark);
+    margin: 15.5px
+}
+
+
+.settings-container select {
+    padding: 5px;
+    border: 3px solid var(--dark);
+    background-color: var(--white);
+    color: var(--dark);
+    font-weight: 800;
+    width: 100%
+}
+
+span {
+    padding-left: 10px;
+}
+
+#saveButton {
+    margin: 0;
+    position: relative;
+    top: 3%;
+    left: 50%;
+    -ms-transform: translate( 50%, 50%);
+    transform: translate(-50%, -50%);
+    width: 97%;
 }
 
 .delete-btn, .update-btn {
