@@ -220,7 +220,6 @@ if __name__ == '__main__':
             "scaleSpeed": 0.5,
             "wandSmoothing": 20,
             "graphicsQuality": 5,
-            "renderDistance": 5000,
             "invertCameraControlsXAxis": False,
             "invertCameraControlsYAxis": False,
             "hideControls": False
