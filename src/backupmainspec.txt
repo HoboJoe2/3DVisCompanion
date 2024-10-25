@@ -9,7 +9,6 @@ a = Analysis(
         ('static', 'static'),
         ('templates', 'templates'),
         ('Blender 4.2', 'Blender 4.2'),
-        ('icon.png', '.'),
         ('2gltf2.py', '.')
     ],
     hiddenimports=[

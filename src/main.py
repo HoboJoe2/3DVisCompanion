@@ -17,7 +17,7 @@ import send2trash
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
+ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
 BASE_PATH = "c:\\3DVisFolder\\models" #"\\\\CAVE-HEADNODE\\data\\3dvis" #  
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
