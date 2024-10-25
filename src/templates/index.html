@@ -129,14 +129,14 @@
                                 box.addEventListener('mouseenter', () => {
                                     boxes.forEach(b => {
                                         if (b !== box) {
-                                            b.classList.remove('active'); // Remove active class from other boxes
+                                            b.classList.remove('active');
                                         }
                                     });
-                                    box.classList.add('active'); // Add active class to the hovered box
+                                    box.classList.add('active');
                                 });
                         
                                 box.addEventListener('mouseleave', () => {
-                                    box.classList.remove('active'); // Remove active class on mouse leave
+                                    box.classList.remove('active');
                                 });
                             });
                         </script>

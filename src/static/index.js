@@ -190,10 +190,11 @@ $(document).ready(function() {
         jsonData.options.rotationSpeed = parseFloat($('#rotationSpeed').val());
         jsonData.options.scaleSpeed = parseFloat($('#scaleSpeed').val());
         jsonData.options.wandSmoothing = parseFloat($('#wandSmoothing').val());
+        jsonData.options.renderDistance = parseInt($('#renderDistance').val(), 10);
         jsonData.options.invertCameraControls = $('#invertCameraControls').is(':checked');
         jsonData.options.hideControls = $('#hideControls').is(':checked');
-        jsonData.options.graphicsQuality = parseInt($('#graphicsQuality').val(), 10);
-    
+        jsonData.options.graphicsQuality = $('#graphicsQuality').val();
+
         socket.emit('json_transfer_to_python', jsonData);
     });
 
