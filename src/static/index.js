@@ -1,19 +1,8 @@
 var jsonData = {
-    "last_error": false,
+    "last_error": "",
     "models": [],
     "scenes": [],
-    "options": {
-        "cameraSensitivity": 50,
-        "movementSpeed": 50,
-        "positionSpeed": 50,
-        "rotationSpeed": 50,
-        "scaleSpeed": 50,
-        "wandSmoothing": 50,
-        "graphicsQuality": 5,
-        "renderDistance": 5000,
-        "invertCameraControls": false,
-        "hideControls": false
-    }
+    "options": {}
 };
 
 var socket = io();// io.connect(window.location.origin);
@@ -21,7 +10,7 @@ var socket = io();// io.connect(window.location.origin);
 // Update the tables data
 function populateTables() {
     if (jsonData["last_error"]) {
-        alert("Failed import of one or more models! See command prompt window for details");
+        alert("Failed import of one or more models! See command prompt window for more details. Error message:        " + jsonData["last_error"]);
     }
 
     const $modelsTableBody = $("#modelsTable tbody");
@@ -32,6 +21,7 @@ function populateTables() {
 
     modelData = jsonData["models"];
     sceneData = jsonData["scenes"];
+    optionsData = jsonData["options"];
 
     $.each(modelData, function(index, object) {
         $.each(object, function(path, metadata) {
@@ -72,6 +62,20 @@ function populateTables() {
             }
         });
     });
+
+    $.each(optionsData, function(key, value) {
+        const $element = $("#" + key);
+        if ($element.length) {
+            if ($element.attr("type") === "range") {
+                $element.val(value);
+                $("#" + key + "Value").text(value);
+            } else if ($element.attr("type") === "checkbox") {
+                $element.prop("checked", value);
+            } else if ($element.prop("tagName") === "SELECT") {
+                $element.val(value);
+          }
+        }
+      });
 
     socket.emit('json_transfer_to_python', jsonData);
 }

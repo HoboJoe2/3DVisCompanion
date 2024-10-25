@@ -17,12 +17,11 @@ import send2trash
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"# "c:\\3DVisFolder" 
+ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" #  "c:\\3DVisFolder\\models"
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
-OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
-OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.json")
+OPTIONS_FILE_PATH = os.path.join(BASE_PATH + "\\options.json")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
@@ -101,7 +100,8 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
         print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
     if os.path.exists(ERROR_FILE_PATH):
-        json_dict["last_error"] = True
+        with open(ERROR_FILE_PATH, "r", encoding="utf-8") as f:
+            json_dict["last_error"] = f.read()
         os.remove(ERROR_FILE_PATH)
 
     return json_dict
@@ -208,7 +208,6 @@ if __name__ == '__main__':
     # Create directories if they don't exist
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
-    os.makedirs(OPTIONS_FOLDER_PATH, exist_ok=True)
     if os.path.exists(ERROR_FILE_PATH): 
         os.remove(ERROR_FILE_PATH)
 
@@ -222,7 +221,8 @@ if __name__ == '__main__':
             "wandSmoothing": 20,
             "graphicsQuality": 5,
             "renderDistance": 5000,
-            "invertCameraControls": False,
+            "invertCameraControlsXAxis": False,
+            "invertCameraControlsYAxis": False,
             "hideControls": False
         }
         with open(OPTIONS_FILE_PATH, "w", encoding="utf-8") as f:
