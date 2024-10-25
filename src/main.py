@@ -21,8 +21,7 @@ ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
 BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" #  "c:\\3DVisFolder\\models"
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
-OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
-OPTIONS_FILE_PATH = os.path.join(OPTIONS_FOLDER_PATH + "\\options.json")
+OPTIONS_FILE_PATH = os.path.join(BASE_PATH + "\\options.json")
 BLUE = colorama.Fore.BLUE
 RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
@@ -209,7 +208,6 @@ if __name__ == '__main__':
     # Create directories if they don't exist
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
-    os.makedirs(OPTIONS_FOLDER_PATH, exist_ok=True)
     if os.path.exists(ERROR_FILE_PATH): 
         os.remove(ERROR_FILE_PATH)
 
