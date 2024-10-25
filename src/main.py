@@ -18,7 +18,7 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" # "c:\\3DVisFolder"
+BASE_PATH = "c:\\3DVisFolder\\models" #"\\\\CAVE-HEADNODE\\data\\3dvis" #  
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
@@ -223,7 +223,8 @@ if __name__ == '__main__':
             "wandSmoothing": 20,
             "graphicsQuality": 5,
             "renderDistance": 5000,
-            "invertCameraControls": False,
+            "invertCameraControlsXAxis": False,
+            "invertCameraControlsYAxis": False,
             "hideControls": False
         }
         with open(OPTIONS_FILE_PATH, "w", encoding="utf-8") as f:
