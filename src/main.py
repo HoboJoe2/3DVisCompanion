@@ -18,7 +18,7 @@ import send2trash
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.png'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" # "c:\\3DVisFolder" # 
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" # "c:\\3DVisFolder"
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FOLDER_PATH = os.path.join(BASE_PATH + "\\options")
@@ -101,7 +101,8 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
         print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
     if os.path.exists(ERROR_FILE_PATH):
-        json_dict["last_error"] = True
+        with open(ERROR_FILE_PATH, "r", encoding="utf-8") as f:
+            json_dict["last_error"] = f.read()
         os.remove(ERROR_FILE_PATH)
 
     return json_dict

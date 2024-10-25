@@ -3,7 +3,7 @@ Blender/
 models/
 scenes/
 options.json
-#test_assets/
+test_assets/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

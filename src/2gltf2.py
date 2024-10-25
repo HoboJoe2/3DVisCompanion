@@ -28,7 +28,7 @@ import sys
 import datetime
 
 # Global variables
-MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models" # "c:\\3DVisFolder\\models" # 
+MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models"#"c:\\3DVisFolder\\models"  
 
 
 # Function definitions
@@ -93,4 +93,4 @@ try:
 
 except Exception as e:
     with open(os.path.join(MODEL_FOLDER_PATH, "last_error.txt"), "w", encoding="utf-8") as f:
-        f.write("True")
+        f.write(str(e))

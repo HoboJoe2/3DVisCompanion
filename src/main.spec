@@ -8,8 +8,8 @@ a = Analysis(
     datas=[
         ('static', 'static'),
         ('templates', 'templates'),
-        ('Blender 4.2', 'Blender 4.2'),
-        ('icon.png', '.'),
+        ('Blender', 'Blender'),
+        ('icon.ico', '.'),
         ('2gltf2.py', '.')
     ],
     hiddenimports=[
@@ -44,7 +44,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='icon.png'
+    icon='icon.ico'
 )
 coll = COLLECT(
     exe,
