@@ -180,17 +180,17 @@ $(document).ready(function() {
     });
 
     $('#saveButton').on('click', function() {
-        jsonData.options.cameraSensitivity = parseFloat($('#cameraSensitivity').val());
-        jsonData.options.movementSpeed = parseFloat($('#movementSpeed').val());
-        jsonData.options.positionSpeed = parseFloat($('#positionSpeed').val());
-        jsonData.options.rotationSpeed = parseFloat($('#rotationSpeed').val());
-        jsonData.options.scaleSpeed = parseFloat($('#scaleSpeed').val());
-        jsonData.options.wandSmoothing = parseFloat($('#wandSmoothing').val());
-        jsonData.options.renderDistance = parseInt($('#renderDistance').val(), 10);
+        jsonData.options.cameraSensitivity = $('#cameraSensitivity').val();
+        jsonData.options.movementSpeed = $('#movementSpeed').val();
+        jsonData.options.positionSpeed = $('#positionSpeed').val();
+        jsonData.options.rotationSpeed = $('#rotationSpeed').val();
+        jsonData.options.scaleSpeed = $('#scaleSpeed').val();
+        jsonData.options.wandSmoothing = $('#wandSmoothing').val();
+        jsonData.options.renderDistance = $('#renderDistance').val();
         jsonData.options.invertCameraControls = $('#invertCameraControls').is(':checked');
         jsonData.options.hideControls = $('#hideControls').is(':checked');
-        jsonData.options.graphicsQuality = parseInt($('#graphicsQuality').val(), 10);
-    
+        jsonData.options.graphicsQuality = $('#graphicsQuality').val();
+
         socket.emit('json_transfer_to_python', jsonData);
     });
 
