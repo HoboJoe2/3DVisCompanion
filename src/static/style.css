@@ -385,7 +385,7 @@ strong {
 
 .box {
     transition: flex 0.5s ease, background-color 0.5s ease, border 0.5s ease, border-radius 0.5s ease, color 0.5s ease;
-    filter: drop-shadow(-10px 10px var(--red));
+    filter: drop-shadow(-7px 7px var(--red));
     background-color: var(--dark);
     justify-content: center;
     box-sizing: border-box;
@@ -481,7 +481,7 @@ strong {
     }
 
     h1 {
-        top: -61px;
-        left: -15px;
+        top: -60px;
+        left: -14.5px;
     }
 }
