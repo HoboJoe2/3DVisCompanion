@@ -17,8 +17,17 @@ import send2trash
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+<<<<<<< Updated upstream
 ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
 BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" #  "c:\\3DVisFolder\\models"
+=======
+CONFIG_FILE_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'config.json'))
+with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
+
+
+ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
+BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"# "c:\\3DVisFolder" 
+>>>>>>> Stashed changes
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FILE_PATH = os.path.join(BASE_PATH + "\\options.json")
@@ -27,6 +36,8 @@ RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
 ERROR_FILE_PATH = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
 colorama.init(autoreset=True)
+
+
 
 
 # Class definitions
