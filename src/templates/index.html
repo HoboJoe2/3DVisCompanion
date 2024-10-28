@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <title>3DVisCompanion</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io@4.8.1/client-dist/socket.io.min.js"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
-    <script src="{{ url_for('static', filename='tab.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='tab.js') }}" defer></script> <!-- Defer stops this from loading until the dom is finalised -->
 </head>
 <body>
     <ul class="tabs">
@@ -21,7 +21,6 @@
     <img src="{{ url_for('static',filename='3DVis-transparent.png') }}">
     <p id="status"></p>
     <div class="tab-contents">
-
         <div id="about" data-tab-content class="active">
             <div class="vertical">
                 <div class="horizontal relative">
@@ -69,7 +68,7 @@
                                     Created using PyQt6: <a href="https://pypi.org/project/PyQt6/" target="_blank">https://pypi.org/project/PyQt6/</a><br>
                                     Created using SocketIO: <a href="https://socket.io/" target="_blank">https://socket.io/</a><br>
                                     Created using Send2Trash: <a href="https://pypi.org/project/Send2Trash/" target="_blank">https://pypi.org/project/Send2Trash/</a><br>
-                                    Created using filedialpy: <a href="https://github.com/e-sollier/filedialpy" target="_blank">https://github.com/e-sollier/filedialpy</a><br>	
+                                    Created using filedialpy: <a href="https://github.com/e-sollier/filedialpy" target="_blank">https://github.com/e-sollier/filedialpy</a><br><br>
 
                                     <strong>Licensing used in the 3DVis Application</strong><br>
                                     Created using Blender: <a href="https://www.blender.org/" target="_blank">https://www.blender.org/</a><br>
@@ -148,7 +147,6 @@
                 </div>
             </div>
         </div>
-
         <div id="import" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -172,7 +170,6 @@
                 </div>
             </div>
         </div>
-
         <div id="model_management" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -204,7 +201,6 @@
                 </div>
             </div>
         </div>
-
         <div id="scene_management" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -234,7 +230,6 @@
                 </div>
             </div>
         </div>
-
         <div id="options" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -298,7 +293,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </body>
 </html>

@@ -36,6 +36,8 @@ with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
     loaded_json = json.load(f)
     BASE_PATH = loaded_json["base_path"]
 
+MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
+
 
 # Function definitions
 def generateUniqueFolderName(model_name):
@@ -43,13 +45,13 @@ def generateUniqueFolderName(model_name):
 
 
 # Main program
-try:
-    current_argument = sys.argv[-1]
+try: # Try except block is necessary to write an error file if conversion fails. The conversion file is read by main.py
+    current_argument = sys.argv[-1] # Will be the file path to the model to convert
 
     root, current_extension = os.path.splitext(current_argument)
     current_basename = os.path.basename(root)
 
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.wm.read_factory_settings(use_empty=True) # Resets blenders internal scene to an empty environment to help with conversion
 
     match current_extension:
         case ".gltf" | ".glb":
@@ -79,11 +81,11 @@ try:
         case ".usd" | ".usda" | ".usdc" | ".usdz":
             bpy.ops.wm.usd_import(filepath=current_argument)
 
-    model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}")
+    model_folder_name = generateUniqueFolderName(f"{current_basename}{current_extension}") # will be a unique name based on the current time
     export_dir = f"{MODEL_FOLDER_PATH}\\{model_folder_name}" 
-    os.makedirs(export_dir, exist_ok=True) # Create model folder if not exists
+    os.makedirs(export_dir, exist_ok=True) # Create the model folder
 
-    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures", export_draco_mesh_compression_enable=False)
+    bpy.ops.export_scene.gltf(filepath=f"{export_dir}\\scene.gltf", export_format="GLTF_SEPARATE", export_texture_dir="textures", export_draco_mesh_compression_enable=False) # Render/export the converted model
 
     json_metadata = f"""
     {{
@@ -95,7 +97,7 @@ try:
     """
 
     with open(f"{export_dir}\\metadata.json", "w", encoding="utf-8") as f:
-        f.write(json_metadata)
+        f.write(json_metadata) # Write the metadata file in the models folder
 
 except Exception as e:
     with open(os.path.join(MODEL_FOLDER_PATH, "last_error.txt"), "w", encoding="utf-8") as f:

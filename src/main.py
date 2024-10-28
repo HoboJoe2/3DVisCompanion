@@ -66,14 +66,14 @@ socketio = flask_socketio.SocketIO(app, async_mode='threading')
 
 # Function definitions
 def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
-    json_dict = {
-        "last_error": False,
+    json_dict = { # This will be returned, and eventually sent to the frontend javascript
+        "last_error": False, # Sets the last_error back to false if it was set to true
         "models": [],
         "scenes": [],
         "options": {}
-    }
+    } 
 
-    for dirpath, dirnames, filenames in os.walk(models_path):
+    for dirpath, dirnames, filenames in os.walk(models_path): # Look through all files in the models directory, recursively
         for filename in filenames:
             if filename.lower().endswith(".json"):
                 json_object = {}
@@ -81,11 +81,11 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
                 try:
                     with open(json_file_path, 'r', encoding="utf-8") as json_file:
                         json_object[json_file_path] = json.load(json_file)
-                    json_dict["models"].append(json_object)
+                    json_dict["models"].append(json_object) # Add model to the list of models in json_dict
                 except json.decoder.JSONDecodeError as e:
                     print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
-    for dirpath, dirnames, filenames in os.walk(scenes_path):
+    for dirpath, dirnames, filenames in os.walk(scenes_path): # Look through all files in the scenes directory, recursively
         for filename in filenames:
             if filename.lower().endswith(".json"):
                 json_object = {}
@@ -93,21 +93,21 @@ def getJSONFilesFromDirectories(models_path, scenes_path, options_path):
                 try:
                     with open(json_file_path, 'r', encoding="utf-8") as json_file:
                         json_object[json_file_path] = json.load(json_file)
-                    json_dict["scenes"].append(json_object)
+                    json_dict["scenes"].append(json_object) # Add scene to the list of scenes in json_dict
                 except json.decoder.JSONDecodeError as e:
                     print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
     try:
         with open(options_path, "r", encoding="utf-8") as f:
             options = json.load(f)
-            json_dict["options"] = options
+            json_dict["options"] = options # Update options in json_dict 
     except json.decoder.JSONDecodeError as e:
         print(RED + f"--- ERROR WITH {json_file_path}: {e}. JSON FILE MUST BE MANUALLY FIXED! ---\n\n")
 
     if os.path.exists(ERROR_FILE_PATH):
         with open(ERROR_FILE_PATH, "r", encoding="utf-8") as f:
-            json_dict["last_error"] = f.read()
-        os.remove(ERROR_FILE_PATH)
+            json_dict["last_error"] = f.read() # If an error file exists that means the last model conversion failed, so add the message to the json_dict
+        os.remove(ERROR_FILE_PATH) # Remove the error file, since it has been noticed
 
     return json_dict
 
@@ -118,29 +118,29 @@ def updateAndDeleteJSONFiles(recieved_json_data):
     object_types_to_check = ["models", "scenes"]
 
     for object_type in object_types_to_check: # Will be 'models' and 'scenes'
-        for generated_json_item in generated_json_data[object_type]:
+        for generated_json_item in generated_json_data[object_type]: # Will have structure {"[file_path]": {[json data about model/scene]}}
             for path in generated_json_item.keys():
                 generated_json_paths.append(path)
-        for recieved_json_item in recieved_json_data[object_type]: # recieved_json_data is recieved from frontend
+        for recieved_json_item in recieved_json_data[object_type]: # recieved_json_data is recieved from frontend, will have same structure as generated
             for path, json_data in recieved_json_item.items():
                 recieved_json_paths.append(path)
 
-                if os.path.exists(path): # Update the json data with what is recieved from frontend
+                if os.path.exists(path): 
                     with open(path, 'w', encoding="utf-8") as json_file:
-                        json.dump(json_data, json_file, indent=4)
+                        json.dump(json_data, json_file, indent=4) # Update the json data with what is recieved from frontend
 
-    for model in generated_json_data["models"]: # Delete if path in list of files on filesystem is not in list of files recieved from frontend
+    for model in generated_json_data["models"]: # Delete model if path in list of files on filesystem is not in list of files recieved from frontend
         for path in model.keys():
             if path not in recieved_json_paths:        
                 send2trash.send2trash(os.path.dirname(path))
     
-    for scene in generated_json_data["scenes"]: # Scenes just delete the path, models have to delete the parent folder
+    for scene in generated_json_data["scenes"]: # Scenes delete the path, models delete the parent folder
         for path in scene.keys():
             if path not in recieved_json_paths:
                 send2trash.send2trash(path)
 
     with open(OPTIONS_FILE_PATH, "w", encoding="utf-8") as f:
-        json.dump(recieved_json_data["options"], f, indent=4)
+        json.dump(recieved_json_data["options"], f, indent=4) # Update the options with what is recieved from frontend
     return
 
 def convertFile(file_path):
@@ -152,7 +152,7 @@ def convertFile(file_path):
     print(BLUE + f"--- BEGINNING IMPORT OF {file_path} ---\n\n")
 
     try:
-        result = subprocess.run(["Blender\\blender.exe", "-b", "-P", "2gltf2.py", "--", file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(["Blender\\blender.exe", "-b", "-P", "2gltf2.py", "--", file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE) # convert the file
         print(BLUE + "--- OUTPUT FROM BLENDER CONVERSION (stdout stream) ---\n\n", result.stdout.decode())
         print(BLUE + "--- OUTPUT FROM BLENDER CONVERSION (stderr stream) ---\n\n", result.stderr.decode())
     except subprocess.CalledProcessError as e:
@@ -167,8 +167,8 @@ def convertAllFilesInDir(dir_path):
         for filename in filenames:
             for ext in SUPPORTED_EXTENSIONS:
                 if filename.lower().endswith(ext):
-                    matched_files.append(os.path.join(dirpath, filename))
-                    break  # Stop checking other extensions once a match is found
+                    matched_files.append(os.path.join(dirpath, filename)) # Add model to list of matched files
+                    break  # Stop checking other extensions once it confirms that the extention is valid
 
     for file in matched_files:
         convertFile(file)
@@ -178,15 +178,15 @@ def run_flask_app():
     socketio.run(app, port=5000)
     return
 
-@socketio.on('connect')
+@socketio.on('connect') # Happens each time the client connects, which happens when the app is started and also after each model import
 def handle_socket_connect():
     json_dict = getJSONFilesFromDirectories(MODEL_FOLDER_PATH, SCENE_FOLDER_PATH, OPTIONS_FILE_PATH)
-    socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table on connection
+    socketio.emit('json_transfer_to_js', json_dict) # Send a dictionary to the frontend to populate the table based on what is in the json files
     return
 
-@socketio.on('json_transfer_to_python')
+@socketio.on('json_transfer_to_python') # Happens when data is recieved from the frontend, which happens whenever the user presses any of the buttons such as save options, update model name etc.
 def handle_socket_event(data):
-    updateAndDeleteJSONFiles(data) # Update and delete json files when data is received from frontend (when user changes a name or deletes a model)
+    updateAndDeleteJSONFiles(data) # Update and delete json files based on what the frontend says they should be
     return
 
 @app.route('/')
@@ -214,7 +214,7 @@ if __name__ == '__main__':
     os.makedirs(MODEL_FOLDER_PATH, exist_ok=True)
     os.makedirs(SCENE_FOLDER_PATH, exist_ok=True)
     if os.path.exists(ERROR_FILE_PATH): 
-        os.remove(ERROR_FILE_PATH)
+        os.remove(ERROR_FILE_PATH) # Each time the program is started, the error file is removed
 
     if not os.path.exists(OPTIONS_FILE_PATH):
         data = {
