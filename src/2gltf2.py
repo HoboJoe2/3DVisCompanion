@@ -26,9 +26,15 @@ import bpy
 import os
 import sys
 import datetime
+import json
 
 # Global variables
-MODEL_FOLDER_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis\\models" # "c:\\3DVisFolder\\models"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'config.json'))
+
+with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
+    loaded_json = json.load(f)
+    BASE_PATH = loaded_json["base_path"]
 
 
 # Function definitions

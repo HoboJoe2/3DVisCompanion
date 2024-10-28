@@ -17,27 +17,21 @@ import send2trash
 
 # Global variables
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-<<<<<<< Updated upstream
-ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis" #  "c:\\3DVisFolder\\models"
-=======
 CONFIG_FILE_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'config.json'))
+ICON_FILE_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
+
 with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
+    loaded_json = json.load(f)
+    BASE_PATH = loaded_json["base_path"]
 
-
-ICON_PATH = os.path.abspath(os.path.join(SCRIPT_DIR, 'icon.ico'))
-BASE_PATH = "\\\\CAVE-HEADNODE\\data\\3dvis"# "c:\\3DVisFolder" 
->>>>>>> Stashed changes
 MODEL_FOLDER_PATH = os.path.join(BASE_PATH + "\\models")
 SCENE_FOLDER_PATH = os.path.join(BASE_PATH + "\\scenes")
 OPTIONS_FILE_PATH = os.path.join(BASE_PATH + "\\options.json")
-BLUE = colorama.Fore.BLUE
-RED = colorama.Fore.RED
 SUPPORTED_EXTENSIONS = ['.gltf', '.glb', '.abc', '.blend', '.dae', '.fbx', '.obj', '.ply', '.stl', '.usd', '.usda', '.usdc', '.usdz']
 ERROR_FILE_PATH = os.path.join(MODEL_FOLDER_PATH, "last_error.txt")
+BLUE = colorama.Fore.BLUE
+RED = colorama.Fore.RED
 colorama.init(autoreset=True)
-
-
 
 
 # Class definitions
@@ -45,7 +39,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("3DVisCompanion")
-        self.setWindowIcon(QIcon(ICON_PATH))
+        self.setWindowIcon(QIcon(ICON_FILE_PATH))
         self.browser = QWebEngineView()
         self.browser.setPage(QWebEnginePage(self.browser))
         self.browser.setUrl(QUrl('http://127.0.0.1:5000'))
