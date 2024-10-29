@@ -75,6 +75,7 @@ body {
     width: 100%;
     z-index: 10;
     margin: 0;
+    top: 0;
 }
 
 .tab:hover {
@@ -89,13 +90,14 @@ body {
 }
 
 #status:not(:empty) {
+    border: 3px solid var(--white);
     background-color: var(--dark);
+    transform: translateX(-50%);
     color: var(--white);
     position: fixed;
-    font-size: 2em;
+    font-size: 3em;
     padding: 20px;
     left: 50%;
-    transform: translateX(-50%);
     z-index: 1;
     top: 40%;
 }
@@ -125,6 +127,16 @@ body {
     height: 60vh;
     padding: 1em;
     margin: 0;
+}
+
+.inner2{
+    box-shadow: 0px 0px 0px 20px var(--dark);
+    align-content: center;
+    border-radius: 10px;
+    background: var(--white);
+    overflow: auto;
+    height: 80vh;
+    margin: 0; 
 }
 
 .relative {
@@ -362,17 +374,22 @@ img {
     top: 75%;
 }
 
-form.margin-right {
-    margin-right: 5%;
-}
-
-.jc-center {
-    justify-content: center;
-}
-
 .flex-parent {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100%;
+}
+
+.flex-parent form {
+    flex: 1;
+    margin: 4px 0px;
+}
+
+.flex-parent button {
+    width: 100%;
+    height: 100%;
+    font-size: 3em;
+    padding: 10px;
 }
 
 strong {
@@ -414,7 +431,7 @@ strong {
     border-radius: 10px;
     color: var(--dark);
     z-index: 1;
-    flex: 2;
+    flex: 4;
 }
 
 .box.active h2 {
@@ -439,6 +456,22 @@ strong {
 .box:nth-child(3) p {
     text-align: left;
     font-size: 0.8em;
+}
+
+.controls {
+    width: 80%;
+    margin: auto;
+}
+
+.idklmaotb {
+    filter: none;
+    margin: 0;
+}
+
+.controls td, th {
+    padding: 6px 6px;
+    font-size: 1.5em;
+    text-align: center;
 }
 
 @media (max-width: 1000px), (max-height: 875px), (orientation: portrait) {
@@ -468,7 +501,7 @@ strong {
 
     .nice {
         filter: drop-shadow(-12px 12px var(--blue));
-        border: 15px solid var(--dark);
+        border: 20px solid var(--dark);
     }
 
     button {
@@ -481,7 +514,7 @@ strong {
     }
 
     h1 {
-        top: -60px;
-        left: -14.5px;
+        top: -65px;
+        left: -20px;
     }
 }

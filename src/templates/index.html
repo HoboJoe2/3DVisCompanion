@@ -16,6 +16,7 @@
         <li data-tab-target="#model_management" class="tab">MODEL MANAGEMENT</li>
         <li data-tab-target="#scene_management" class="tab">SCENE MANAGEMENT</li>
         <li data-tab-target="#options" class="tab">OPTIONS</li>
+        <li data-tab-target="#controls" class="tab">CONTROLS</li>
     </ul>
     <div class="bg"></div>
     <img src="{{ url_for('static',filename='3DVis-transparent.png') }}">
@@ -30,9 +31,9 @@
                             <div class="box" id="box1">
                                 <h2>3DVis</h2>
                                 <p>
-                                    3DVis is a visualisation platform utilising CAVE2 to view your 3D models in a 3D space. It's perfect with all your presentation needs with built-in tools for adjusting models, adding text, adding audio, controlling the enviroment and lighting, etc. Below is all the controls for the system:
+                                    3DVis is a visualisation platform utilising CAVE2 to view your 3D models in a 3D space. It's perfect with all your presentation needs with built-in tools for adjusting models, adding text, adding audio, controlling the enviroment and lighting, etc.
                                     <br><br>
-                                    <strong>MAKE SURE THE "MODE" LIGHT IS OFF BEFORE CONTINUING</strong>
+                                    <strong>MAKE SURE THE "MODE" LIGHT IS OFF BEFORE CONTINUING</strong>                                      
                                 </p>
                             </div>
                             <div class="box" id="box2">
@@ -123,7 +124,7 @@
                                     Tennis Racquet: <a href="https://www.cgtrader.com/free-3d-models/sports/equipment/tennis-racquet-d3a35a80-a64c-4134-8237-cf04669ddedc" target="_blank">https://www.cgtrader.com/free-3d-models/sports/equipment/tennis-racquet-d3a35a80-a64c-4134-8237-cf04669ddedc</a> (Royalty Free, No AI License)<br>
                                     Trunk: <a href="https://polyhaven.com/a/dead_tree_trunk_02" target="_blank">https://polyhaven.com/a/dead_tree_trunk_02</a> (CC0 License)<br>
                                 </p>
-                            </div>                           
+                            </div>
                         </div>
                         <script>
                             const boxes = document.querySelectorAll('.box');
@@ -153,11 +154,8 @@
                     <div class="nice">
                         <h1>IMPORT</h1>
                         <div class="inner">
-                            <p>
-                                
-                            </p>
-                            <div class="flex-parent jc-center">
-                                <form action="{{ url_for('import_file') }}" class="margin-right" method="post">
+                            <div class="flex-parent">
+                                <form action="{{ url_for('import_file') }}" method="post">
                                     <button type="submit" id="importButton">IMPORT MODEL</button>
                                 </form>
             
@@ -287,6 +285,296 @@
                                         </div>
                                     </div>
                                     <button id="saveButton">SAVE SETTINGS</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="controls" data-tab-content>
+            <div class="vertical">
+                <div class="controls relative">
+                    <div class="nice">
+                        <div class="corners">
+                            <div class="inner2">
+                                <h1>CONTROLS</h1>
+                                <table class="idklmaotb">
+                                    <tr>
+                                    <th></th>
+                                    <th>Left Stick</th>
+                                    <th>Right Stick</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>X</th>
+                                    <th>Y</th>
+                                    <th>Left Bumper</th>
+                                    <th>Right Bumper</th>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Standard Mode</strong></td>
+                                    <td>Movement</td>
+                                    <td>Height/Camera</td>
+                                    <td>Open Menu</td>
+                                    <td></td>
+                                    <td>Double Movement Speed</td>
+                                    <td>Toggle Showcase Mode</td>
+                                    <td>Enter Create Mode</td>
+                                    <td>Enter Edit Mode</td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Menu Mode</strong></td>
+                                    <td>Navigate Menu</td>
+                                    <td></td>
+                                    <td>Select Option</td>
+                                    <td>Back</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Tab Left</td>
+                                    <td>Switch Tab Right</td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Create Mode</strong></td>
+                                    <td>Movement</td>
+                                    <td>Height/Camera</td>
+                                    <td>Open Menu</td>
+                                    <td></td>
+                                    <td>Paste Copied Model</td>
+                                    <td>Copy Hovered Model</td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Edit Mode</strong></td>
+                                    <td>Movement</td>
+                                    <td>Height/Camera</td>
+                                    <td>Select Hovered Model</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Model Selected</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Model</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Position Mode (Model)</em></td>
+                                    <td>Move Model</td>
+                                    <td>Change Model Height</td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Model</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Rotation Mode (Model)</em></td>
+                                    <td>Rotate Model</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Model</td>
+                                    <td>Reset Rotation</td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Scale Mode (Model)</em></td>
+                                    <td>Scale Model</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Model</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Light Selected</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Color</td>
+                                    <td>Remove Light</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Position Mode (Light)</em></td>
+                                    <td>Move Light</td>
+                                    <td>Change Light Height</td>
+                                    <td>Switch Between Position/Range/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Color</td>
+                                    <td>Remove Light</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Range Mode (Light)</em></td>
+                                    <td>Change Light Range</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Range/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Color</td>
+                                    <td>Remove Light</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Brightness & Shadows Mode (Light)</em></td>
+                                    <td>Change Brightness Intensity</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Range/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Color</td>
+                                    <td>Remove Light</td>
+                                    <td>Toggle Shadows</td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Audio Selected</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Between Position/Range/Volume</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Audio</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Position Mode (Audio)</em></td>
+                                    <td>Move Audio</td>
+                                    <td>Change Audio Height</td>
+                                    <td>Switch Between Position/Range/Volume</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Audio</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Range Mode (Audio)</em></td>
+                                    <td>Adjust Max Range</td>
+                                    <td>Adjust Min Range</td>
+                                    <td>Switch Between Position/Range/Volume</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Audio</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Volume Mode (Audio)</em></td>
+                                    <td>Adjust Volume</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Range/Volume</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td></td>
+                                    <td>Remove Audio</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Text Selected</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Set Text</td>
+                                    <td>Remove Text</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Position Mode (Text)</em></td>
+                                    <td>Move Text</td>
+                                    <td>Change Text Height</td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Set Text</td>
+                                    <td>Remove Text</td>
+                                    <td>Change Color</td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Rotation Mode (Text)</em></td>
+                                    <td>Rotate Text</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Set Text</td>
+                                    <td>Remove Text</td>
+                                    <td>Reset Rotation</td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Scale Mode (Text)</em></td>
+                                    <td>Font Size</td>
+                                    <td>Text Box Width</td>
+                                    <td>Switch Between Position/Rotation/Scale</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Set Text</td>
+                                    <td>Remove Text</td>
+                                    <td>Text Alignment</td>
+                                    </tr>
+                                    <tr>
+                                    <td><strong>Sky Selected</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Sky</td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Position Mode (Sky)</em></td>
+                                    <td>Adjust Sun Position</td>
+                                    <td>Adjust Sky Height</td>
+                                    <td>Switch Between Position/Rotation/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Sky</td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Rotation Mode (Sky)</em></td>
+                                    <td>Rotate Sky</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Sky</td>
+                                    <td></td>
+                                    <td></td>
+                                    </tr>
+                                    <tr>
+                                    <td><em>Brightness & Shadows Mode (Sky)</em></td>
+                                    <td>Adjust Sky Brightness</td>
+                                    <td></td>
+                                    <td>Switch Between Position/Rotation/Brightness & Shadows</td>
+                                    <td>Deselect</td>
+                                    <td>Toggle Player Movement</td>
+                                    <td>Change Sky</td>
+                                    <td></td>
+                                    <td>Toggle Shadows</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
