@@ -127,23 +127,47 @@
                             </div>
                         </div>
                         <script>
-                            const boxes = document.querySelectorAll('.box');
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const boxes = document.querySelectorAll('.box');
+                                let activeBox = null;
                         
-                            boxes.forEach(box => {
-                                box.addEventListener('mouseenter', () => {
-                                    boxes.forEach(b => {
-                                        if (b !== box) {
-                                            b.classList.remove('active');
+                                boxes.forEach(box => {
+                                    box.addEventListener('mouseenter', function() {
+                                        if (activeBox) {
+                                            activeBox.classList.remove('active');
+                                        }
+                        
+                                        activeBox = this;
+                                        this.classList.add('active');
+                        
+                                        boxes.forEach(b => {
+                                            if (b !== activeBox) {
+                                                b.classList.add('inactive');
+                                            } else {
+                                                b.classList.remove('inactive');
+                                            }
+                                        });
+                                    });
+                        
+                                    box.addEventListener('mouseleave', function() {
+                                        if (this === activeBox) {
+                                            this.classList.remove('active');
+                                            activeBox = null;
+                        
+                                            boxes.forEach(b => {
+                                                b.classList.remove('inactive');
+                                            });
+                                        } else {
+                                            boxes.forEach(b => {
+                                                if (b !== activeBox) {
+                                                    b.classList.remove('inactive');
+                                                }
+                                            });
                                         }
                                     });
-                                    box.classList.add('active');
-                                });
-                        
-                                box.addEventListener('mouseleave', () => {
-                                    box.classList.remove('active');
                                 });
                             });
-                        </script>
+                        </script>                             
                     </div>
                 </div>
             </div>
@@ -154,6 +178,21 @@
                     <div class="nice">
                         <h1>IMPORT</h1>
                         <div class="inner">
+                            <p>
+                                <strong>STEP 1:</strong><br>
+                                Have your model/s prepared either on a USB or on the local storage of CAVE2's Headnode. The following supported file formats are as follows: <strong>.gltf, .glb, .abc, .blend, .dae, .fbx, .obj, .ply, .stl, .usd, .usda, .usdc, .usdz
+                                </strong><br><br>
+
+                                <strong>STEP 2:</strong><br>
+                                Click on <strong>IMPORT MODEL</strong> or <strong>IMPORT ALL FROM FOLDER</strong> (folder must only contain models) and select from the appeared input.<br><br>
+
+                                <strong>STEP 3:</strong><br>
+                                Wait.<br><br>
+
+                                <strong>STEP 4:</strong><br>
+                                Adjust models as need in the <strong>MODEL MANAGEMENT</strong> tab.
+
+                            </p>
                             <div class="flex-parent">
                                 <form action="{{ url_for('import_file') }}" method="post">
                                     <button type="submit" id="importButton">IMPORT MODEL</button>
@@ -271,13 +310,13 @@
                                                 <option value="5" selected>ULTRA</option>
                                             </select>
                                         </div>
-                                        <div class="setting-item">
+                                        <div class="setting-item" style="display: flex; align-items: center;">
                                             <label>
                                                 <input type="checkbox" id="invertCameraControls">
                                                 Invert Camera Controls
                                             </label>
                                         </div>
-                                        <div class="setting-item">
+                                        <div class="setting-item" style="display: flex; align-items: center;">
                                             <label>
                                                 <input type="checkbox" id="hideControls">
                                                 Hide Controls
