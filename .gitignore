@@ -1,9 +1,10 @@
 Blender/
+test_assets/
 .vscode/
 models/
 scenes/
 options.json
-test_assets/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
