@@ -10,6 +10,8 @@
     <script src="{{ url_for('static', filename='tab.js') }}" defer></script> <!-- Defer stops this from loading until the dom is finalised -->
 </head>
 <body>
+
+    <!--Tabs bar at top-->
     <ul class="tabs">
         <li data-tab-target="#about" class="active tab">ABOUT</li>
         <li data-tab-target="#import" class="tab">IMPORT</li>
@@ -18,10 +20,14 @@
         <li data-tab-target="#options" class="tab">OPTIONS</li>
         <li data-tab-target="#controls" class="tab">CONTROLS</li>
     </ul>
-    <div class="bg"></div>
-    <img src="{{ url_for('static',filename='3DVis-transparent.png') }}">
-    <p id="status"></p>
+    <div class="bg"></div> <!--Scrolling background-->
+    <img src="{{ url_for('static',filename='3DVis-transparent.png') }}"> <!--Logo image-->
+    <p id="status"></p> <!--Import model status-->
+
+     <!--Main Body-->
     <div class="tab-contents">
+
+        <!--About content-->
         <div id="about" data-tab-content class="active">
             <div class="vertical">
                 <div class="horizontal relative">
@@ -146,7 +152,8 @@
                                 </p>
                             </div>
                         </div>
-                        <script>
+                        <!--JS so this page has a cool transition with boxes-->
+                        <script> 
                             document.addEventListener("DOMContentLoaded", function() {
                                 const boxes = document.querySelectorAll('.box');
                                 let activeBox = null;
@@ -192,6 +199,8 @@
                 </div>
             </div>
         </div>
+
+        <!--Import content-->
         <div id="import" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -227,6 +236,8 @@
                 </div>
             </div>
         </div>
+
+        <!--Model management content-->
         <div id="model_management" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -258,6 +269,8 @@
                 </div>
             </div>
         </div>
+
+        <!--Scene management content-->
         <div id="scene_management" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -287,6 +300,8 @@
                 </div>
             </div>
         </div>
+
+        <!--Options management content-->
         <div id="options" data-tab-content>
             <div class="vertical">
                 <div class="horizontal relative">
@@ -351,6 +366,8 @@
                 </div>
             </div>
         </div>
+
+        <!--Controls content-->
         <div id="controls" data-tab-content>
             <div class="vertical">
                 <div class="controls relative">
@@ -358,7 +375,7 @@
                         <div class="corners">
                             <div class="inner2">
                                 <h1>CONTROLS</h1>
-                                <table class="idklmaotb">
+                                <table class="tb2">
                                     <tr>
                                     <th></th>
                                     <th>Left Stick</th>
@@ -642,5 +659,6 @@
             </div>
         </div>
     </div>
+
 </body>
 </html>
