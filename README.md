@@ -3,7 +3,7 @@ Simple GUI to upload, rename and delete 3D models, used with 3DVis. Can also ren
 
 ## Install Instructions
 
-1. Install python 3.11.x on your computer. The app has only been tested on 3.11.9, because the bpy module might break on later versions. Python 3.11 can be downloaded from https://www.python.org/downloads/.
+1. Install python 3.11.x on your computer, and make sure python.exe is added to PATH. The app has only been tested on 3.11.9, because the bpy module might break on later versions. Python 3.11 can be downloaded from https://www.python.org/downloads/. 
 2. Unzip the 3DVisCompanion.zip file.
 3. Open a command prompt or powershell window in the `src` folder of the unzipped folder.
 4. Make sure python 3.11.x is the active python version by running the `python --version` command.
