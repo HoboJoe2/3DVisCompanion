@@ -150,7 +150,7 @@ $(document).on('click', '.delete-btn', function() {
                 }
             });
         }
-        $("#status").text("Model deleted.");
+        $("#status").text("Deleted.");
         refreshData(); // Re-populate the table, also necessary to send the current data (with the models/scenes missing from the array) to python
     }
     setTimeout(function() {
