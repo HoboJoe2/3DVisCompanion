@@ -1,5 +1,6 @@
 # 3DVisCompanion
 Simple GUI to upload, rename and delete 3D models, used with 3DVis. Can also rename and delete scenes, and change options in the 3DVis application.
+Note: AI was used to assist with creating this application.
 
 ## Install Instructions
 
